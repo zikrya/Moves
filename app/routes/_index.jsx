@@ -2,6 +2,9 @@ import { Link } from "@remix-run/react";
 
 import { useOptionalUser } from "~/utils";
 
+import { Form } from "@remix-run/react";
+
+
 export const meta = () => [{ title: "Remix Notes" }];
 
 export default function Index() {
@@ -84,6 +87,12 @@ export default function Index() {
             <p className="mt-6 text-lg leading-8 text-gray-300">Welcome to the new era of event management, where our platform streamlines the ticketing process, makes organizing events effortless, and all at a significantly lower cost - because we believe that exceptional service shouldn't come with a hefty price tag.</p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/join" className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">Get started</Link>
+              <Form method="post" action="/logout">
+  <button type="submit" className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+    log out
+  </button>
+</Form>
+
             </div>
           </div>
         </div>
