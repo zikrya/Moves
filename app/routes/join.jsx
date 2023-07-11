@@ -8,7 +8,7 @@ import { safeRedirect, validateEmail } from "~/utils";
 
 export const loader = async ({ request }) => {
   const userId = await getUserId(request);
-  if (userId) return redirect("/");
+  if (userId) return redirect("/dashboard");
   return json({});
 };
 
