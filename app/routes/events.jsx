@@ -1,28 +1,17 @@
-import { Link } from 'react-router-dom';
 import { useLoaderData } from '@remix-run/react';
-import { getSession } from '../session.server';
+import { Link } from 'react-router-dom';
 import { prisma } from '../db.server';
+import { requireUserId } from '../session.server';
 
 export const loader = async ({ request }) => {
-  const session = await getSession(request);
+  const userId = await requireUserId(request);
 
-  if (!session.userId) {
-    return { events: [] }; // Return empty events if not authenticated
-  }
-
-  try {
-    const events = await prisma.event.findMany({
-      where: { userId: session.userId }, // Fetch only the events of the logged in user
-    });
-    return { events };
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    return { events: [] };
-  } finally {
-    await prisma.$disconnect();
-  }
+  const events = await prisma.event.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  });
+  return { events };
 };
-
 
 export default function Events() {
   const { events } = useLoaderData();
