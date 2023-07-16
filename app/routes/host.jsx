@@ -1,16 +1,44 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@remix-run/react';
+
+async function createEvent({ eventName, eventDescription }) {
+  const response = await fetch('/create-events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ eventName, eventDescription }),
+  });
+
+  if (!response.ok) throw new Error(`Failed to create event: ${response.statusText}`);
+
+  return response;
+}
 
 export default function Host() {
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     console.log(`Creating event with name ${eventName} and description ${eventDescription}`);
+
+    try {
+      const response = await createEvent({ eventName, eventDescription }); // Call createEvent directly
+
+      if (response.status === 200) {
+        // Event created successfully, you can handle the response here
+        console.log('Event created successfully');
+      } else {
+        // Handle error response
+        console.error('Failed to create event');
+      }
+    } catch (error) {
+      // Handle network or server error
+      console.error('Error creating event:', error);
+    }
+
     setEventName('');
     setEventDescription('');
-  };
+  }
 
   return (
     <div className="p-4">
