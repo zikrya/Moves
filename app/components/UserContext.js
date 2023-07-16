@@ -1,21 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { getUser } from "~/session.server";
+import { useOptionalUser } from "../utils";
 
 export const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = useOptionalUser();
+  const isLoggedIn = Boolean(user);
   const location = useLocation();
-
-  useEffect(() => {
-    const fetchUserStatus = async () => {
-      const user = await getUser();
-      setIsLoggedIn(Boolean(user));
-    };
-
-    fetchUserStatus();
-  }, [location]);
 
   return (
     <UserContext.Provider value={{ isLoggedIn }}>

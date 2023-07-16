@@ -1,8 +1,8 @@
 import { Link } from "@remix-run/react";
 import { useNavigate } from "@remix-run/react";
-import { useUserContext } from '../components/UserContext';
+import { useOptionalUser } from "../utils";
 const NavBar = () => {
-    const { isLoggedIn } = useUserContext();
+    const user = useOptionalUser();
     let navigate = useNavigate();
     const handleLogout = () => {
       navigate("/logout");
@@ -29,19 +29,19 @@ const NavBar = () => {
           <Link to="join" className="text-sm font-semibold leading-6 text-white">Sign Up</Link>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-  {isLoggedIn ? (
-    <button
-      onClick={handleLogout}
-      className="text-sm font-semibold leading-6 text-white"
-    >
-      Log out <span aria-hidden="true">&rarr;</span>
-    </button>
-  ) : (
-    <Link to="/login" className="text-sm font-semibold leading-6 text-white">
-      Log in <span aria-hidden="true">&rarr;</span>
-    </Link>
-  )}
-</div>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="text-sm font-semibold leading-6 text-white"
+            >
+              Log out <span aria-hidden="true">&rarr;</span>
+            </button>
+          ) : (
+            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
+        </div>
       </nav>
      );
 }
