@@ -26,10 +26,21 @@ export const action = async ({ request }: ActionArgs) => {
       });
       return customer.id;
     });
+
   const { event, ...price } = await prisma.price.findUniqueOrThrow({
     where: { id: priceId },
     include: { event: true },
   });
+
+  const ticketsCount = await prisma.ticket.count({
+    where: {
+      eventId: event.id,
+    },
+  });
+
+  if (ticketsCount >= event.numOfTics) {
+    throw new Error("The event is sold out");
+  }
 
   const checkoutSession = await stripe.checkout.sessions.create({
     success_url: `${process.env.WEBSITE_URL}/api/checkout/callback/{CHECKOUT_SESSION_ID}`,

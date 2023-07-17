@@ -11,22 +11,33 @@ export const loader = async ({ params }: LoaderArgs) => {
       user: true,
     },
   });
-  return json({ event });
+
+  const ticketsCount = await prisma.ticket.count({
+    where: {
+      eventId: event.id,
+    },
+  });
+
+  return json({ event, ticketsCount });
 };
 
 export default function Event() {
-  const { event } = useLoaderData<typeof loader>();
+  const { event, ticketsCount } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
+
+  const isSoldOut = ticketsCount >= event.numOfTics;
 
   const handleCheckout = () => {
     // TODO: Handle multiple prices.
-    fetcher.submit(
-      { priceId: event.prices[0].id },
-      {
-        method: "POST",
-        action: "/api/checkout",
-      }
-    );
+    if (!isSoldOut) {
+      fetcher.submit(
+        { priceId: event.prices[0].id },
+        {
+          method: "POST",
+          action: "/api/checkout",
+        }
+      );
+    }
   };
 
   return (
@@ -44,9 +55,9 @@ export default function Event() {
         <div className="mt-10">
           <div className="rounded-lg shadow-lg overflow-hidden">
             <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6">
-              {event.imageUrl && (
+              {event.imageURL && (
                 <img
-                  src={event.imageUrl}
+                  src={event.imageURL}
                   className="h-56 w-full object-cover mb-8"
                   alt={event.title}
                 />
@@ -78,9 +89,16 @@ export default function Event() {
               <div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-blue-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-blue-700"
+                  disabled={isSoldOut}
+                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${
+                    isSoldOut
+                      ? "bg-gray-400 text-gray-700"
+                      : fetcher.state === "submitting"
+                      ? "bg-blue-400"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
                 >
-                  {fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
+                  {isSoldOut ? "Sold Out" : fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
                 </button>
               </div>
             </div>
