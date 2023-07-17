@@ -35,36 +35,33 @@ export default function DashboardPage() {
   // For now, we’ll just dump everything here.
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <h2>My Events</h2>
-      {!user.events.length && <p>You don't have any events yet.</p>}
-      <ul className="list-inside list-disc">
-        {user.events.map((event) => (
-          <li key={event.id}>
-            <Link
-              to={`/events/${event.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              {event.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <h2>My Tickets</h2>
-      {!user.tickets.length && <p>You don't have any tickets yet.</p>}
-      <ul className="list-inside list-disc">
-        {user.tickets.map((ticket) => (
-          <li key={ticket.id}>
-            <Link
-              to={`/tickets/${ticket.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              {ticket.event.title} - {ticket.price.name} - {ticket.price.price}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="bg-purple-50 min-h-screen px-4 py-5">
+      <h1 className="text-4xl font-semibold mb-10">Dashboard</h1>
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">My Events</h2>
+          {!user.events.length && <p className="text-gray-600">You don't have any events yet.</p>}
+          {user.events.map((event) => (
+            <div key={event.id} className="bg-white shadow rounded-lg px-5 py-6 mb-4">
+              <Link to={`/events/${event.id}`} className="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                {event.title}
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">My Tickets</h2>
+          {!user.tickets.length && <p className="text-gray-600">You don't have any tickets yet.</p>}
+          {user.tickets.map((ticket) => (
+            <div key={ticket.id} className="bg-white shadow rounded-lg px-5 py-6 mb-4">
+              <Link to={`/tickets/${ticket.id}`} className="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                {ticket.event.title} - {ticket.price.name} - {ticket.price.price}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
