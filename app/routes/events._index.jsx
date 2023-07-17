@@ -21,7 +21,7 @@ export default function Events() {
       <h1 className="text-2xl mb-4">Events</h1>
       <div className="grid grid-cols-3 gap-4">
         {events.map((event) => (
-          <Link to={`/event/${event.id}`} key={event.id} className="block border p-4 rounded shadow">
+          <Link to={`/events/${event.id}`} key={event.id} className="block border p-4 rounded shadow">
             <h2 className="text-xl">{event.title}</h2>
             <p>{event.description}</p>
           </Link>
