@@ -10,10 +10,10 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between p-6 lg:px-8 bg-slate-300" aria-label="Global">
+    <nav className="flex items-center justify-between p-6 lg:px-8 bg-gray-600" aria-label="Global">
       <div className="flex lg:flex-1">
         <Link to="/" className="-m-1.5 p-1.5">
-          <h1 className="text-2xl font-mono text-black">Moves</h1>
+          <h1 className="text-2xl font-mono text-white">Moves</h1>
         </Link>
       </div>
       <div className="flex lg:hidden">

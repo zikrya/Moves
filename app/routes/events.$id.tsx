@@ -30,46 +30,61 @@ export default function Event() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-200 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md">
-        <h1 className="mb-4 text-center text-3xl font-bold text-gray-800">
-          {event.title}
-        </h1>
-        {event.imageUrl && (
-          <img
-            src={event.imageUrl}
-            className="mt-4 h-56 w-full rounded-lg object-cover shadow-lg"
-            alt={event.title}
-          />
-        )}
-        <p className="text-gray-700">{event.description}</p>
-        <div className="mt-4 flex flex-wrap justify-between">
-          <p className="text-sm text-gray-600">
-            <span className="font-bold">Location: </span>
-            {event.location}
-          </p>
-          <p className="text-sm text-gray-600">
-            <span className="font-bold">Date: </span>
-            {event.date}
-          </p>
-          <p className="text-sm text-gray-600">
-            {/* In the future, we'll want a way to show different ticket types. */}
-            <span className="font-bold">Price: </span>${event.prices[0].price}
-          </p>
-          <p className="text-sm text-gray-600">
-            {/* In the future, we’ll want events to be associated with an organizer (e.g. Kappa Sigma). */}
-            {/* We can show their name here and link to their profile page. */}
-            <span className="font-bold">Host: </span>
-            {event.user.email}
+    <div className="bg-purple-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:text-center">
+          <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            {event.title}
+          </h1>
+          <p className="mt-4 max-w-2xl text-xl text-gray-700 lg:mx-auto">
+            {event.description}
           </p>
         </div>
-        <div className="mt-6">
-          <button
-            onClick={handleCheckout}
-            className="block rounded-lg bg-blue-500 px-4 py-2 text-center font-semibold text-white hover:bg-blue-600"
-          >
-            {fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
-          </button>
+
+        <div className="mt-10">
+          <div className="rounded-lg shadow-lg overflow-hidden">
+            <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+              {event.imageUrl && (
+                <img
+                  src={event.imageUrl}
+                  className="h-56 w-full object-cover mb-8"
+                  alt={event.title}
+                />
+              )}
+              <div className="sm:flex sm:items-start sm:justify-between">
+                <div className="sm:flex sm:space-x-5">
+                  <div className="mt-4 text-center sm:mt-0 sm:text-left">
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Location: </span>
+                      {event.location}
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      <span className="font-medium">Date: </span>
+                      {event.date}
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      <span className="font-medium">Price: </span>
+                      ${event.prices[0].price}
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      <span className="font-medium">Host: </span>
+                      {event.user.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-8 bg-gray-50 sm:p-10 sm:pt-6">
+              <div>
+                <button
+                  onClick={handleCheckout}
+                  className="w-full bg-blue-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-blue-700"
+                >
+                  {fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

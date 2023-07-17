@@ -18,26 +18,28 @@ export default function Events() {
   const { events } = useLoaderData<typeof loader>();
 
   return (
-    <div className="p-4">
-      <h1 className="mb-4 text-2xl">Events</h1>
-      <div className="grid grid-cols-3 gap-4">
-        {events.map((event) => (
-          <Link
-            to={`/events/${event.id}`}
-            key={event.id}
-            className="block rounded border p-4 shadow"
-          >
-            <h2 className="text-xl">{event.title}</h2>
-            <p>{event.description}</p>
-          </Link>
-        ))}
+    <div className="bg-purple-50 min-h-screen">
+      <div className="p-4">
+        <h1 className="mb-4 text-2xl">Events</h1>
+        <div className="grid grid-cols-3 gap-4">
+          {events.map((event) => (
+            <Link
+              to={`/events/${event.id}`}
+              key={event.id}
+              className="block rounded border p-4 shadow"
+            >
+              <h2 className="text-xl">{event.title}</h2>
+              <p>{event.description}</p>
+            </Link>
+          ))}
+        </div>
+        <Link
+          to="/host"
+          className="mt-4 inline-block rounded bg-blue-600 px-4 py-2 text-white"
+        >
+          Create Event
+        </Link>
       </div>
-      <Link
-        to="/host"
-        className="mt-4 inline-block rounded bg-blue-600 px-4 py-2 text-white"
-      >
-        Create Event
-      </Link>
     </div>
   );
 }

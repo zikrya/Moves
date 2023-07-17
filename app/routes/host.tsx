@@ -20,6 +20,7 @@ export const action = async ({ request }: ActionArgs) => {
   const location = formData.get('location') as string;
   const date = formData.get('eventDate') as string; // eventDate should match the name attribute in the form
   const price = Number(formData.get('price') as string);
+  const numOfTics = Number(formData.get('numOfTics') as string);
 
   try {
     const event = await prisma.event.create({
@@ -28,6 +29,7 @@ export const action = async ({ request }: ActionArgs) => {
         description,
         location,
         date,
+        numOfTics,
         user: {
           connect: { id: userId },
         },
@@ -52,8 +54,8 @@ export default function Host() {
   const actionData = useActionData();
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-gray-100 p-8 rounded-lg">
+    <div className="bg-purple-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white rounded-lg p-8">
         <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">Create Event</h2>
         {actionData?.error && (
           <div className="bg-red-500 text-white p-4 rounded mb-4">
@@ -104,12 +106,20 @@ export default function Host() {
             />
           </div>
           <div>
-            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-300 hover:bg-violet-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:bg-violet-300">Create Event</button>
+            <label htmlFor="numOfTics" className="block text-sm font-medium text-gray-700">Number of Tickets</label>
+            <input
+              id="numOfTics"
+              name="numOfTics"
+              type="number"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
+            />
+          </div>
+          <div>
+            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Create Event</button>
           </div>
         </Form>
         <Link to="/events" className="flex justify-center mt-4 text-sm text-center text-gray-500 hover:text-gray-600">Back to Events</Link>
       </div>
     </div>
   );
-
 }
