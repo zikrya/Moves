@@ -1,9 +1,10 @@
+import type { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Link } from 'react-router-dom';
 import { prisma } from '../db.server';
 import { requireUserId } from '../session.server';
 
-export const loader = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const userId = await requireUserId(request);
 
   const events = await prisma.event.findMany({
@@ -14,7 +15,7 @@ export const loader = async ({ request }) => {
 };
 
 export default function Events() {
-  const { events } = useLoaderData();
+  const { events } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-4">

@@ -1,8 +1,9 @@
-import { prisma } from '../db.server';
-import { json } from '@remix-run/server-runtime';
+import type { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import { json } from '@remix-run/server-runtime';
+import { prisma } from '../db.server';
 
-export const loader = async ({ params }) => {
+export const loader = async ({ params }: LoaderArgs) => {
     const event = await prisma.event.findUniqueOrThrow({
         where: { id: params.id },
     });
@@ -10,7 +11,7 @@ export const loader = async ({ params }) => {
 };
 
 export default function Event() {
-    const { event } = useLoaderData();
+    const { event } = useLoaderData<typeof loader>();
 
     return (
         <div className="p-4">

@@ -1,16 +1,19 @@
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { Form, Link, useActionData } from '@remix-run/react';
 import { json, redirect } from '@remix-run/server-runtime';
-import { requireUserId } from '../session.server';
 import { prisma } from "../db.server";
+import { requireUserId } from '../session.server';
 
-export const loader = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
   return {};
 };
 
-export const action = async ({ request }) => {
+export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
-  const { title, description } = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
+  const title = formData.get('title') as string;
+  const description = formData.get('description') as string;
   try {
     const event = await prisma.event.create({
       data: {
