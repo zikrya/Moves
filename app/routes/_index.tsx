@@ -14,7 +14,6 @@ export default function Index() {
     <div>
         <div className="bg-white">
   <header className="absolute inset-x-0 top-0 z-50">
-    <NavBar/>
     <div className="lg:hidden" role="dialog" aria-modal="true">
       <div className="fixed inset-0 z-50"></div>
       <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
