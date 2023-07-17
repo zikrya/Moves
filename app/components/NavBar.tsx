@@ -40,15 +40,19 @@ const NavBar = () => {
         </button>
       </div>
       <div className="hidden lg:flex lg:gap-x-12">
-        {NAV_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            to={link.href}
-            className="text-sm font-semibold leading-6 text-white"
-          >
-            {link.title}
-          </Link>
-        ))}
+        <Link to="/events" className="text-sm font-semibold leading-6 text-white">Events</Link>
+        <Link to="/host" className="text-sm font-semibold leading-6 text-white">Host</Link>
+        <Link to="#" className="text-sm font-semibold leading-6 text-white">Help</Link>
+        <div>
+       {isAuthenticated ? (
+         <Link to="/dashboard" className="text-sm font-semibold leading-6 text-white">
+             Dashboard
+        </Link>
+      ) : (
+          <Link to="/join" className="text-sm font-semibold leading-6 text-white">Sign Up</Link>
+      )}
+</div>
+
       </div>
       <div className="hidden lg:flex lg:flex-1 lg:justify-end">
         {isAuthenticated ? (
