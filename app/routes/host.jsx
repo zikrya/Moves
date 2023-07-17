@@ -3,6 +3,11 @@ import { json, redirect } from '@remix-run/server-runtime';
 import { requireUserId } from '../session.server';
 import { prisma } from "../db.server";
 
+export const loader = async ({ request }) => {
+  await requireUserId(request);
+  return {};
+};
+
 export const action = async ({ request }) => {
   const userId = await requireUserId(request);
   const { title, description } = Object.fromEntries(await request.formData());
@@ -17,7 +22,7 @@ export const action = async ({ request }) => {
       },
     });
     console.log('Event created', event);
-    return redirect('/events');
+    return redirect(`/events/${event.id}`);
   } catch (error) {
     console.error('Error creating event:', error);
     return json({ error: `Error creating event: ${error}` }, { status: 500 });
