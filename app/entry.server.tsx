@@ -6,6 +6,7 @@
 
 import { PassThrough } from "node:stream";
 
+import type { EntryContext } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
@@ -14,10 +15,10 @@ import { renderToPipeableStream } from "react-dom/server";
 const ABORT_DELAY = 5_000;
 
 export default function handleRequest(
-  request,
-  responseStatusCode,
-  responseHeaders,
-  remixContext
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext
 ) {
   return isbot(request.headers.get("user-agent"))
     ? handleBotRequest(
@@ -35,10 +36,10 @@ export default function handleRequest(
 }
 
 function handleBotRequest(
-  request,
-  responseStatusCode,
-  responseHeaders,
-  remixContext
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
@@ -47,7 +48,6 @@ function handleBotRequest(
         url={request.url}
         abortDelay={ABORT_DELAY}
       />,
-
       {
         onAllReady() {
           const body = new PassThrough();
@@ -63,10 +63,10 @@ function handleBotRequest(
 
           pipe(body);
         },
-        onShellError(error) {
+        onShellError(error: unknown) {
           reject(error);
         },
-        onError(error) {
+        onError(error: unknown) {
           responseStatusCode = 500;
           console.error(error);
         },
@@ -78,10 +78,10 @@ function handleBotRequest(
 }
 
 function handleBrowserRequest(
-  request,
-  responseStatusCode,
-  responseHeaders,
-  remixContext
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
@@ -90,7 +90,6 @@ function handleBrowserRequest(
         url={request.url}
         abortDelay={ABORT_DELAY}
       />,
-
       {
         onShellReady() {
           const body = new PassThrough();
@@ -106,10 +105,10 @@ function handleBrowserRequest(
 
           pipe(body);
         },
-        onShellError(error) {
+        onShellError(error: unknown) {
           reject(error);
         },
-        onError(error) {
+        onError(error: unknown) {
           console.error(error);
           responseStatusCode = 500;
         },

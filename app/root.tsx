@@ -1,15 +1,24 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { Meta, Links, Outlet, ScrollRestoration, Scripts, LiveReload } from "@remix-run/react";
+import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react";
+
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
 
-export const links = () => [
+export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   return json({ user: await getUser(request) });
 };
 

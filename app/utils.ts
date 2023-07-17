@@ -1,6 +1,8 @@
 import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
 
+import type { User } from "~/models/user.server";
+
 const DEFAULT_REDIRECT = "/";
 
 /**
@@ -10,7 +12,10 @@ const DEFAULT_REDIRECT = "/";
  * @param {string} to The redirect destination
  * @param {string} defaultRedirect The redirect to use if the to is unsafe.
  */
-export function safeRedirect(to, defaultRedirect = DEFAULT_REDIRECT) {
+export function safeRedirect(
+  to: FormDataEntryValue | string | null | undefined,
+  defaultRedirect: string = DEFAULT_REDIRECT
+) {
   if (!to || typeof to !== "string") {
     return defaultRedirect;
   }
@@ -28,7 +33,9 @@ export function safeRedirect(to, defaultRedirect = DEFAULT_REDIRECT) {
  * @param {string} id The route id
  * @returns {JSON|undefined} The router data or undefined if not found
  */
-export function useMatchesData(id) {
+export function useMatchesData(
+  id: string
+): Record<string, unknown> | undefined {
   const matchingRoutes = useMatches();
   const route = useMemo(
     () => matchingRoutes.find((route) => route.id === id),
@@ -37,11 +44,11 @@ export function useMatchesData(id) {
   return route?.data;
 }
 
-function isUser(user) {
+function isUser(user: any): user is User {
   return user && typeof user === "object" && typeof user.email === "string";
 }
 
-export function useOptionalUser() {
+export function useOptionalUser(): User | undefined {
   const data = useMatchesData("root");
   if (!data || !isUser(data.user)) {
     return undefined;
@@ -49,7 +56,7 @@ export function useOptionalUser() {
   return data.user;
 }
 
-export function useUser() {
+export function useUser(): User {
   const maybeUser = useOptionalUser();
   if (!maybeUser) {
     throw new Error(
@@ -59,6 +66,6 @@ export function useUser() {
   return maybeUser;
 }
 
-export function validateEmail(email) {
+export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
