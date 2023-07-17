@@ -1,50 +1,77 @@
-import type { LoaderArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import { json } from '@remix-run/server-runtime';
-import { prisma } from '../db.server';
+import type { LoaderArgs } from "@remix-run/node";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
+import { prisma } from "../db.server";
 
 export const loader = async ({ params }: LoaderArgs) => {
-    const event = await prisma.event.findUniqueOrThrow({
-        where: { id: params.id },
-    });
-    return json({ event });
+  const event = await prisma.event.findUniqueOrThrow({
+    where: { id: params.id },
+    include: {
+      prices: true,
+      user: true,
+    },
+  });
+  return json({ event });
 };
 
 export default function Event() {
-    const { event } = useLoaderData<typeof loader>();
+  const { event } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
 
-    return (
-        <div className="bg-gray-200 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-md w-full bg-white p-8 rounded-lg space-y-6 shadow-md">
-            <h1 className="text-3xl text-center font-bold text-gray-800 mb-4">{event.title}</h1>
-            {event.imageUrl && (
-              <img
-                src={event.imageUrl}
-                className="mt-4 object-cover w-full h-56 rounded-lg shadow-lg"
-                alt={event.title}
-              />
-            )}
-            <p className="text-gray-700">{event.description}</p>
-            <div className="flex flex-wrap justify-between mt-4">
-              <p className="text-sm text-gray-600">
-                <span className="font-bold">Location: </span>
-                {event.location}
-              </p>
-              <p className="text-sm text-gray-600">
-                <span className="font-bold">Date: </span>
-                {event.date}
-              </p>
-            </div>
-            <div className="mt-6">
-              <a
-                href={event.ticketLink}
-                className="block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-center"
-              >
-                Get Tickets
-              </a>
-            </div>
-          </div>
+  const handleCheckout = () => {
+    // TODO: Handle multiple prices.
+    fetcher.submit(
+      { priceId: event.prices[0].id },
+      {
+        method: "POST",
+        action: "/api/checkout",
+      }
+    );
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-200 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md">
+        <h1 className="mb-4 text-center text-3xl font-bold text-gray-800">
+          {event.title}
+        </h1>
+        {event.imageUrl && (
+          <img
+            src={event.imageUrl}
+            className="mt-4 h-56 w-full rounded-lg object-cover shadow-lg"
+            alt={event.title}
+          />
+        )}
+        <p className="text-gray-700">{event.description}</p>
+        <div className="mt-4 flex flex-wrap justify-between">
+          <p className="text-sm text-gray-600">
+            <span className="font-bold">Location: </span>
+            {event.location}
+          </p>
+          <p className="text-sm text-gray-600">
+            <span className="font-bold">Date: </span>
+            {event.date}
+          </p>
+          <p className="text-sm text-gray-600">
+            {/* In the future, we'll want a way to show different ticket types. */}
+            <span className="font-bold">Price: </span>${event.prices[0].price}
+          </p>
+          <p className="text-sm text-gray-600">
+            {/* In the future, we’ll want events to be associated with an organizer (e.g. Kappa Sigma). */}
+            {/* We can show their name here and link to their profile page. */}
+            <span className="font-bold">Host: </span>
+            {event.user.email}
+          </p>
         </div>
-      );
-
+        <div className="mt-6">
+          <button
+            onClick={handleCheckout}
+            className="block rounded-lg bg-blue-500 px-4 py-2 text-center font-semibold text-white hover:bg-blue-600"
+          >
+            {fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

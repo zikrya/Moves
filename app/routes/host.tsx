@@ -19,6 +19,7 @@ export const action = async ({ request }: ActionArgs) => {
   const description = formData.get('description') as string;
   const location = formData.get('location') as string;
   const date = formData.get('eventDate') as string; // eventDate should match the name attribute in the form
+  const price = Number(formData.get('price') as string);
 
   try {
     const event = await prisma.event.create({
@@ -30,6 +31,13 @@ export const action = async ({ request }: ActionArgs) => {
         user: {
           connect: { id: userId },
         },
+        prices: {
+          // By defining the price as a relationship, we can support multiple prices for an event (e.g. VIP, General Admission, etc.)
+          create: {
+            name: "General Admission",
+            price,
+          }
+        }
       },
     });
     console.log('Event created', event);
@@ -83,6 +91,15 @@ export default function Host() {
               id="eventDate"
               name="eventDate"
               type="date"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
+            />
+          </div>
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Ticket Price</label>
+            <input
+              id="price"
+              name="price"
+              type="number"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
             />
           </div>
