@@ -1,40 +1,45 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import type { Price } from "@prisma/client";
+import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/server-runtime";
+import { useOptionalUser } from "~/utils";
 import { prisma } from "../db.server";
 
-export const loader = async ({ params }: LoaderArgs) => {
-  // TODO: Handle multiple prices.
+type PriceWithCount = SerializeFrom<Price & { _count: { tickets: number } }>;
 
-  const { prices, ...event } = await prisma.event.findUniqueOrThrow({
+export const loader = async ({ params }: LoaderArgs) => {
+  const event = await prisma.event.findUniqueOrThrow({
     where: { id: params.id },
     include: {
-      prices: { include: { _count: true } },
+      prices: {
+        include: {
+          _count: true,
+        },
+      },
       user: true,
     },
   });
-
-  const price = prices[0];
-  const isSoldOut = price.quantity
-    ? price._count.tickets >= price.quantity
-    : false;
-
-  return json({ event, price, isSoldOut });
+  return json(event);
 };
 
+const isSoldOut = (price: PriceWithCount) =>
+  price.quantity ? price._count.tickets >= price.quantity : false;
+
 export default function Event() {
-  const { event, price, isSoldOut } = useLoaderData<typeof loader>();
+  const user = useOptionalUser();
+  const event = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  const handleCheckout = () => {
-    if (isSoldOut) return;
-    fetcher.submit(
-      { priceId: price.id },
-      {
-        method: "POST",
-        action: "/api/checkout",
-      }
-    );
+  const handleCheckout = (price: PriceWithCount) => {
+    if (!isSoldOut(price)) {
+      fetcher.submit(
+        { priceId: price.id },
+        {
+          method: "POST",
+          action: "/api/checkout",
+        }
+      );
+    }
   };
 
   return (
@@ -68,10 +73,7 @@ export default function Event() {
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Date: </span>
-                      {event.date}
-                    </p>
-                    <p className="mt-2 text-sm text-gray-500">
-                      <span className="font-medium">Price: </span>${price.price}
+                      {event.startsAt} - {event.endsAt}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Host: </span>
@@ -82,26 +84,46 @@ export default function Event() {
               </div>
             </div>
             <div className="bg-gray-50 px-6 py-8 sm:p-10 sm:pt-6">
-              <div>
-                <button
-                  onClick={handleCheckout}
-                  disabled={isSoldOut}
-                  className={`flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium ${
-                    isSoldOut
-                      ? "bg-gray-400 text-gray-700"
-                      : fetcher.state === "submitting"
-                      ? "bg-blue-400"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
-                >
-                  {isSoldOut
-                    ? "Sold Out"
-                    : fetcher.state === "submitting"
-                    ? "Processing..."
-                    : "Buy Ticket"}
-                </button>
-              </div>
+              {event.prices &&
+                event.prices.map((price) => (
+                  <div key={price.id}>
+                    <p className="mt-2 text-sm text-gray-500">
+                      <span className="font-medium">Ticket Type: </span>
+                      {price.name}
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      <span className="font-medium">Price: </span>${price.price}
+                    </p>
+                    <button
+                      onClick={() => handleCheckout(price)}
+                      disabled={isSoldOut(price)}
+                      className={`flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium ${
+                        isSoldOut(price)
+                          ? "bg-gray-400 text-gray-700"
+                          : fetcher.state === "submitting"
+                          ? "bg-blue-400"
+                          : "bg-blue-600 text-white hover:bg-blue-700"
+                      }`}
+                    >
+                      {isSoldOut(price)
+                        ? "Sold Out"
+                        : fetcher.state === "submitting"
+                        ? "Processing..."
+                        : "Buy Ticket"}
+                    </button>
+                  </div>
+                ))}
             </div>
+            {user?.id === event.userId && (
+              <div className="bg-gray-50 px-6 py-8 sm:p-10 sm:pt-6">
+                <Link
+                  to={`/events/${event.id}/edit`}
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700"
+                >
+                  Edit Event
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

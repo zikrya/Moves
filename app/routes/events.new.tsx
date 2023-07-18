@@ -1,8 +1,9 @@
+import type { Prisma } from "@prisma/client";
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
-import { prisma } from "../db.server";
-import { requireUserId } from "../session.server";
+import { prisma } from "~/db.server";
+import { requireUserId } from "~/session.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
@@ -11,13 +12,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
-  const formData = await request.formData();
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const location = formData.get("location") as string;
-  const date = formData.get("eventDate") as string; // eventDate should match the name attribute in the form
-  const price = Number(formData.get("price") as string);
-  const quantity = Number(formData.get("numOfTics") as string);
+  const { title, description, location, startsAt, endsAt } = Object.fromEntries(
+    await request.formData()
+  ) as Record<keyof Prisma.EventCreateWithoutUserInput, string>;
 
   try {
     const event = await prisma.event.create({
@@ -25,29 +22,22 @@ export const action = async ({ request }: ActionArgs) => {
         title,
         description,
         location,
-        date,
+        startsAt: new Date(startsAt),
+        endsAt: new Date(endsAt),
         user: {
           connect: { id: userId },
-        },
-        prices: {
-          // By defining the price as a relationship, we can support multiple prices for an event (e.g. VIP, General Admission, etc.)
-          create: {
-            name: "General Admission",
-            price,
-            quantity,
-          },
         },
       },
     });
     console.log("Event created", event);
-    return redirect(`/events/${event.id}`);
+    return redirect(`/events/${event.id}/edit`);
   } catch (error) {
     console.error("Error creating event:", error);
     return json({ error: `Error creating event: ${error}` }, { status: 500 });
   }
 };
 
-export default function Host() {
+export default function NewEventForm() {
   const actionData = useActionData();
 
   return (
@@ -103,50 +93,36 @@ export default function Host() {
           </div>
           <div>
             <label
-              htmlFor="eventDate"
+              htmlFor="startsAt"
               className="block text-sm font-medium text-gray-700"
             >
-              Event Date
+              Starts At
             </label>
             <input
-              id="eventDate"
-              name="eventDate"
-              type="date"
+              id="startsAt"
+              name="startsAt"
+              type="datetime-local"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
             />
           </div>
           <div>
             <label
-              htmlFor="price"
+              htmlFor="endsAt"
               className="block text-sm font-medium text-gray-700"
             >
-              Ticket Price
+              Ends At
             </label>
             <input
-              id="price"
-              name="price"
-              type="number"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="numOfTics"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Number of Tickets
-            </label>
-            <input
-              id="numOfTics"
-              name="numOfTics"
-              type="number"
+              id="endsAt"
+              name="endsAt"
+              type="datetime-local"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
             />
           </div>
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="mt-4 flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Create Event
             </button>

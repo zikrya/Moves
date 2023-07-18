@@ -4,7 +4,7 @@ import { useOptionalUser } from "../utils";
 
 const NAV_LINKS = [
   { title: "Events", href: "/events" },
-  { title: "Host", href: "/host" },
+  { title: "Host", href: "/events/new" },
   { title: "Dashboard", href: "/dashboard" },
   { title: "Sign Up", href: "/join" },
 ];
@@ -60,7 +60,10 @@ const NavBar = () => {
         >
           Events
         </Link>
-        <Link to="/host" className="text-sm font-semibold leading-6 text-white">
+        <Link
+          to="/events/new"
+          className="text-sm font-semibold leading-6 text-white"
+        >
           Host
         </Link>
         <Link to="#" className="text-sm font-semibold leading-6 text-white">
