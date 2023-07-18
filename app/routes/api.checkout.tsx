@@ -31,7 +31,7 @@ export const action = async ({ request }: ActionArgs) => {
     where: { id: priceId },
     include: {
       event: true,
-      _count: true
+      _count: true,
     },
   });
 

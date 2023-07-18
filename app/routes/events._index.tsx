@@ -18,7 +18,7 @@ export default function Events() {
   const { events } = useLoaderData<typeof loader>();
 
   return (
-    <div className="bg-purple-50 min-h-screen">
+    <div className="min-h-screen bg-purple-50">
       <div className="p-4">
         <h1 className="mb-4 text-2xl">Events</h1>
         <div className="grid grid-cols-3 gap-4">

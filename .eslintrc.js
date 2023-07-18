@@ -11,6 +11,14 @@ module.exports = {
     "cypress/globals": true,
   },
   plugins: ["cypress"],
+  overrides: [
+    {
+      files: ["*-env.d.ts"],
+      rules: {
+        "@typescript-eslint/triple-slash-reference": "off",
+      },
+    },
+  ],
   // We're using vitest which has a very similar API to jest
   // (so the linting plugins work nicely), but we have to
   // set the jest version explicitly.

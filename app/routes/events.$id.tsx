@@ -15,7 +15,9 @@ export const loader = async ({ params }: LoaderArgs) => {
   });
 
   const price = prices[0];
-  const isSoldOut = price.quantity ? price._count.tickets >= price.quantity : false;
+  const isSoldOut = price.quantity
+    ? price._count.tickets >= price.quantity
+    : false;
 
   return json({ event, price, isSoldOut });
 };
@@ -36,10 +38,10 @@ export default function Event() {
   };
 
   return (
-    <div className="bg-purple-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-purple-50 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
-          <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-4xl">
             {event.title}
           </h1>
           <p className="mt-4 max-w-2xl text-xl text-gray-700 lg:mx-auto">
@@ -48,12 +50,12 @@ export default function Event() {
         </div>
 
         <div className="mt-10">
-          <div className="rounded-lg shadow-lg overflow-hidden">
-            <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+          <div className="overflow-hidden rounded-lg shadow-lg">
+            <div className="bg-white px-6 py-8 sm:p-10 sm:pb-6">
               {event.imageURL && (
                 <img
                   src={event.imageURL}
-                  className="h-56 w-full object-cover mb-8"
+                  className="mb-8 h-56 w-full object-cover"
                   alt={event.title}
                 />
               )}
@@ -69,8 +71,7 @@ export default function Event() {
                       {event.date}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      <span className="font-medium">Price: </span>
-                      ${price.price}
+                      <span className="font-medium">Price: </span>${price.price}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Host: </span>
@@ -80,19 +81,24 @@ export default function Event() {
                 </div>
               </div>
             </div>
-            <div className="px-6 py-8 bg-gray-50 sm:p-10 sm:pt-6">
+            <div className="bg-gray-50 px-6 py-8 sm:p-10 sm:pt-6">
               <div>
                 <button
                   onClick={handleCheckout}
                   disabled={isSoldOut}
-                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${isSoldOut
-                    ? "bg-gray-400 text-gray-700"
-                    : fetcher.state === "submitting"
+                  className={`flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium ${
+                    isSoldOut
+                      ? "bg-gray-400 text-gray-700"
+                      : fetcher.state === "submitting"
                       ? "bg-blue-400"
                       : "bg-blue-600 text-white hover:bg-blue-700"
-                    }`}
+                  }`}
                 >
-                  {isSoldOut ? "Sold Out" : fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
+                  {isSoldOut
+                    ? "Sold Out"
+                    : fetcher.state === "submitting"
+                    ? "Processing..."
+                    : "Buy Ticket"}
                 </button>
               </div>
             </div>
