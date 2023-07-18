@@ -55,7 +55,7 @@ export default function Event() {
         </p>
         <p className="text-gray-700">
           <span className="font-bold">Date: </span>
-          {event.date}
+          {event.startsAt.toLocaleString()}
         </p>
         <p className="text-gray-700">
           <span className="font-bold">Location: </span>

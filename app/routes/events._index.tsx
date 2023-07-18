@@ -19,7 +19,7 @@ export default function Events() {
   const { events } = useLoaderData<typeof loader>();
 
   return (
-    <div className="bg-purple-50 min-h-screen">
+    <div className="min-h-screen bg-purple-50">
       <div className="p-4">
         <h1 className="mb-4 text-2xl">Events</h1>
         <div className="grid grid-cols-3 gap-4">
@@ -50,7 +50,7 @@ export default function Events() {
           ))}
         </div>
         <Link
-          to="/host"
+          to="/events/new"
           className="mt-4 inline-block rounded bg-blue-600 px-4 py-2 text-white"
         >
           Create Event
@@ -59,4 +59,3 @@ export default function Events() {
     </div>
   );
 }
-

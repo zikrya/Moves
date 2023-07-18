@@ -19,10 +19,14 @@ describe("smoke tests", () => {
     cy.findByRole("textbox", { name: /email/i }).type(loginForm.email);
     cy.findByLabelText(/password/i).type(loginForm.password);
     cy.findByRole("button", { name: /create account/i }).click();
-    cy.findByRole("button", { name: /create account/i }).should("not.exist").wait(1000);
-    
+    cy.findByRole("button", { name: /create account/i })
+      .should("not.exist")
+      .wait(1000);
+
     cy.findByRole("button", { name: /open main menu/i }).click();
     cy.findByRole("button", { name: /log out.*/i }).click();
-    cy.findByRole("button", { name: /log out.*/i }).should("not.exist").wait(1000);
+    cy.findByRole("button", { name: /log out.*/i })
+      .should("not.exist")
+      .wait(1000);
   });
 });
