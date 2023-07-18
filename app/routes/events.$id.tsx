@@ -4,40 +4,35 @@ import { json } from "@remix-run/server-runtime";
 import { prisma } from "../db.server";
 
 export const loader = async ({ params }: LoaderArgs) => {
-  const event = await prisma.event.findUniqueOrThrow({
+  // TODO: Handle multiple prices.
+
+  const { prices, ...event } = await prisma.event.findUniqueOrThrow({
     where: { id: params.id },
     include: {
-      prices: true,
+      prices: { include: { _count: true } },
       user: true,
     },
   });
 
-  const ticketsCount = await prisma.ticket.count({
-    where: {
-      eventId: event.id,
-    },
-  });
+  const price = prices[0];
+  const isSoldOut = price.quantity ? price._count.tickets >= price.quantity : false;
 
-  return json({ event, ticketsCount });
+  return json({ event, price, isSoldOut });
 };
 
 export default function Event() {
-  const { event, ticketsCount } = useLoaderData<typeof loader>();
+  const { event, price, isSoldOut } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  const isSoldOut = ticketsCount >= event.numOfTics;
-
   const handleCheckout = () => {
-    // TODO: Handle multiple prices.
-    if (!isSoldOut) {
-      fetcher.submit(
-        { priceId: event.prices[0].id },
-        {
-          method: "POST",
-          action: "/api/checkout",
-        }
-      );
-    }
+    if (isSoldOut) return;
+    fetcher.submit(
+      { priceId: price.id },
+      {
+        method: "POST",
+        action: "/api/checkout",
+      }
+    );
   };
 
   return (
@@ -75,7 +70,7 @@ export default function Event() {
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Price: </span>
-                      ${event.prices[0].price}
+                      ${price.price}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Host: </span>
@@ -90,13 +85,12 @@ export default function Event() {
                 <button
                   onClick={handleCheckout}
                   disabled={isSoldOut}
-                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${
-                    isSoldOut
-                      ? "bg-gray-400 text-gray-700"
-                      : fetcher.state === "submitting"
+                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${isSoldOut
+                    ? "bg-gray-400 text-gray-700"
+                    : fetcher.state === "submitting"
                       ? "bg-blue-400"
                       : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
+                    }`}
                 >
                   {isSoldOut ? "Sold Out" : fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
                 </button>

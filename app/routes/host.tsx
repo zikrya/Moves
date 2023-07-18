@@ -3,9 +3,6 @@ import { Form, Link, useActionData } from '@remix-run/react';
 import { json, redirect } from '@remix-run/server-runtime';
 import { prisma } from "../db.server";
 import { requireUserId } from '../session.server';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
@@ -20,7 +17,7 @@ export const action = async ({ request }: ActionArgs) => {
   const location = formData.get('location') as string;
   const date = formData.get('eventDate') as string; // eventDate should match the name attribute in the form
   const price = Number(formData.get('price') as string);
-  const numOfTics = Number(formData.get('numOfTics') as string);
+  const quantity = Number(formData.get('numOfTics') as string);
 
   try {
     const event = await prisma.event.create({
@@ -29,7 +26,6 @@ export const action = async ({ request }: ActionArgs) => {
         description,
         location,
         date,
-        numOfTics,
         user: {
           connect: { id: userId },
         },
@@ -38,6 +34,7 @@ export const action = async ({ request }: ActionArgs) => {
           create: {
             name: "General Admission",
             price,
+            quantity,
           }
         }
       },

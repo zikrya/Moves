@@ -29,16 +29,13 @@ export const action = async ({ request }: ActionArgs) => {
 
   const { event, ...price } = await prisma.price.findUniqueOrThrow({
     where: { id: priceId },
-    include: { event: true },
-  });
-
-  const ticketsCount = await prisma.ticket.count({
-    where: {
-      eventId: event.id,
+    include: {
+      event: true,
+      _count: true
     },
   });
 
-  if (ticketsCount >= event.numOfTics) {
+  if (price.quantity && price._count.tickets >= price.quantity) {
     throw new Error("The event is sold out");
   }
 
