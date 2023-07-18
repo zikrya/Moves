@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { TicketIcon } from "@heroicons/react/24/outline";
 import { useFetcher } from "@remix-run/react";
-import { Fragment, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, Fragment } from "react";
 
 export type PriceFormProps = {
   eventId: string;
@@ -16,12 +16,21 @@ export default function PriceForm({
 }: PriceFormProps) {
   const fetcher = useFetcher();
   const cancelButtonRef = useRef(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (fetcher.data?.success) {
-      onClose();
+      setIsSubmitted(true);
     }
-  }, [fetcher.data, onClose]);
+  }, [fetcher.data]);
+
+  // Check for isSubmitted in your useEffect
+  useEffect(() => {
+    if (isSubmitted) {
+      onClose();
+      setIsSubmitted(false); // Reset the state back to false after closing the form
+    }
+  }, [isSubmitted, onClose]);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
