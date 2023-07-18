@@ -7,31 +7,34 @@ export const loader = async ({ params }: LoaderArgs) => {
   const event = await prisma.event.findUniqueOrThrow({
     where: { id: params.id },
     include: {
-      prices: true,
+      tickets: true,  // Updated to include all tickets
+      prices: true,  // Updated to include all prices
       user: true,
     },
   });
 
-  const ticketsCount = await prisma.ticket.count({
-    where: {
-      eventId: event.id,
-    },
-  });
+  const ticketsCounts = await Promise.all(event.prices.map(async (price) => {
+    return {
+      id: price.id,
+      count: await prisma.ticket.count({
+        where: {
+          priceId: price.id,  // Count tickets per price
+        },
+      }),
+    };
+  }));
 
-  return json({ event, ticketsCount });
+  return json({ event, ticketsCounts });
 };
 
 export default function Event() {
-  const { event, ticketsCount } = useLoaderData<typeof loader>();
+  const { event, ticketsCounts } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  const isSoldOut = ticketsCount >= event.numOfTics;
-
-  const handleCheckout = () => {
-    // TODO: Handle multiple prices.
-    if (!isSoldOut) {
+  const handleCheckout = (priceId: string) => {
+    if (!isSoldOut(priceId)) {
       fetcher.submit(
-        { priceId: event.prices[0].id },
+        { priceId },
         {
           method: "POST",
           action: "/api/checkout",
@@ -39,6 +42,10 @@ export default function Event() {
       );
     }
   };
+
+  const isSoldOut = (priceId: string) =>
+    ticketsCounts.find((tc) => tc.id === priceId).count >=
+    event.prices.find((price) => price.id === priceId).numOfTics;
 
   return (
     <div className="bg-purple-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
@@ -74,10 +81,6 @@ export default function Event() {
                       {event.date}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      <span className="font-medium">Price: </span>
-                      ${event.prices[0].price}
-                    </p>
-                    <p className="mt-2 text-sm text-gray-500">
                       <span className="font-medium">Host: </span>
                       {event.user.email}
                     </p>
@@ -86,21 +89,35 @@ export default function Event() {
               </div>
             </div>
             <div className="px-6 py-8 bg-gray-50 sm:p-10 sm:pt-6">
-              <div>
-                <button
-                  onClick={handleCheckout}
-                  disabled={isSoldOut}
-                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${
-                    isSoldOut
-                      ? "bg-gray-400 text-gray-700"
+              {event.prices && event.prices.map((type) => (
+                <div key={type.id}>
+                  <p className="mt-2 text-sm text-gray-500">
+                    <span className="font-medium">Ticket Type: </span>
+                    {type.name}
+                  </p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    <span className="font-medium">Price: </span>
+                    ${type.price}
+                  </p>
+                  <button
+                    onClick={() => handleCheckout(type.id)}
+                    disabled={isSoldOut(type.id)}
+                    className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium ${
+                      isSoldOut(type.id)
+                        ? "bg-gray-400 text-gray-700"
+                        : fetcher.state === "submitting"
+                        ? "bg-blue-400"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                  >
+                    {isSoldOut(type.id)
+                      ? "Sold Out"
                       : fetcher.state === "submitting"
-                      ? "bg-blue-400"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
-                >
-                  {isSoldOut ? "Sold Out" : fetcher.state === "submitting" ? "Processing..." : "Buy Ticket"}
-                </button>
-              </div>
+                      ? "Processing..."
+                      : "Buy Ticket"}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -108,3 +125,4 @@ export default function Event() {
     </div>
   );
 }
+

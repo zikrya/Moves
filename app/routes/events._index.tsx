@@ -9,6 +9,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const events = await prisma.event.findMany({
     where: { userId },
+    include: { tickets: true, prices: true }, // Include tickets and prices
     orderBy: { createdAt: "desc" },
   });
   return { events };
@@ -30,6 +31,21 @@ export default function Events() {
             >
               <h2 className="text-xl">{event.title}</h2>
               <p>{event.description}</p>
+              {/* List tickets and prices */}
+              {event.tickets.map((ticket) => (
+                <div key={ticket.id}>
+                  <p>
+                    <strong>Ticket ID:</strong> {ticket.id}
+                  </p>
+                </div>
+              ))}
+              {event.prices.map((price) => (
+                <div key={price.id}>
+                  <p>
+                    <strong>Price:</strong> ${price.price}
+                  </p>
+                </div>
+              ))}
             </Link>
           ))}
         </div>
@@ -43,3 +59,4 @@ export default function Events() {
     </div>
   );
 }
+

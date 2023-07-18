@@ -1,11 +1,9 @@
+import { useState } from 'react';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { Form, Link, useActionData } from '@remix-run/react';
 import { json, redirect } from '@remix-run/server-runtime';
 import { prisma } from "../db.server";
 import { requireUserId } from '../session.server';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
@@ -18,9 +16,11 @@ export const action = async ({ request }: ActionArgs) => {
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
   const location = formData.get('location') as string;
-  const date = formData.get('eventDate') as string; // eventDate should match the name attribute in the form
-  const price = Number(formData.get('price') as string);
-  const numOfTics = Number(formData.get('numOfTics') as string);
+  const date = formData.get('eventDate') as string;
+
+  //const ticketTypes = JSON.parse(formData.get('ticketTypes') as string);
+
+  //console.log(ticketTypes);
 
   try {
     const event = await prisma.event.create({
@@ -29,16 +29,15 @@ export const action = async ({ request }: ActionArgs) => {
         description,
         location,
         date,
-        numOfTics,
         user: {
           connect: { id: userId },
         },
         prices: {
-          // By defining the price as a relationship, we can support multiple prices for an event (e.g. VIP, General Admission, etc.)
-          create: {
-            name: "General Admission",
-            price,
-          }
+          create: ticketTypes.map((ticketType) => ({
+            name: ticketType.name,
+            price: ticketType.price,
+            numOfTics: ticketType.numOfTics,  // Add this field to creation
+          })),
         }
       },
     });
@@ -52,6 +51,29 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function Host() {
   const actionData = useActionData();
+  const [ticketTypes, setTicketTypes] = useState([{ name: 'General Admission', price: 0, numOfTics: 0 }]);
+
+  const addTicketType = () => {
+    setTicketTypes([...ticketTypes, { name: '', price: 0, numOfTics: 0 }]);
+  }
+
+  const handleTicketTypeChange = (index, field, value) => {
+    const newTicketTypes = [...ticketTypes];
+    newTicketTypes[index][field] = value;
+    setTicketTypes(newTicketTypes);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    formData.set('ticketTypes', JSON.stringify(ticketTypes));
+
+    fetch(e.target.action, { method: 'POST', body: formData })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }
 
   return (
     <div className="bg-purple-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -62,7 +84,7 @@ export default function Host() {
             {actionData.error}
           </div>
         )}
-        <Form method="POST" className="space-y-6">
+        <Form method="POST" className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">Event Name</label>
             <input
@@ -96,30 +118,47 @@ export default function Host() {
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
             />
           </div>
+          {ticketTypes.map((type, index) => (
+            <div key={index}>
+              <div>
+                <label htmlFor={`ticketType${index}`} className="block text-sm font-medium text-gray-700">Ticket Type</label>
+                <input
+                  id={`ticketType${index}`}
+                  value={type.name}
+                  onChange={e => handleTicketTypeChange(index, 'name', e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
+                />
+              </div>
+              <div>
+                <label htmlFor={`price${index}`} className="block text-sm font-medium text-gray-700">Ticket Price</label>
+                <input
+                  id={`price${index}`}
+                  type="number"
+                  value={type.price}
+                  onChange={e => handleTicketTypeChange(index, 'price', e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
+                />
+              </div>
+              <div>
+                <label htmlFor={`numOfTics${index}`} className="block text-sm font-medium text-gray-700">Number of Tickets</label>
+                <input
+                  id={`numOfTics${index}`}
+                  type="number"
+                  value={type.numOfTics}
+                  onChange={e => handleTicketTypeChange(index, 'numOfTics', e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
+                />
+              </div>
+            </div>
+          ))}
+          <button type="button" onClick={addTicketType} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4">Add Ticket Type</button>
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Ticket Price</label>
-            <input
-              id="price"
-              name="price"
-              type="number"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
-            />
-          </div>
-          <div>
-            <label htmlFor="numOfTics" className="block text-sm font-medium text-gray-700">Number of Tickets</label>
-            <input
-              id="numOfTics"
-              name="numOfTics"
-              type="number"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base text-gray-900"
-            />
-          </div>
-          <div>
-            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Create Event</button>
+            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4">Create Event</button>
           </div>
         </Form>
         <Link to="/events" className="flex justify-center mt-4 text-sm text-center text-gray-500 hover:text-gray-600">Back to Events</Link>
       </div>
     </div>
   );
+
 }
