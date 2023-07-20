@@ -32,17 +32,17 @@ export default function EditEventPage() {
   const [isPriceFormOpen, setIsPriceFormOpen] = useState(false);
 
   return (
-    <div className="bg-white">
-      <h1 className="text-4xl text-center font-extrabold text-gray-900 mt-8">{event.title}</h1>
-      <p className="text-md text-center text-gray-500">{event.description}</p>
+    <div className="blue-back">
+      <h1 className="text-4xl text-center font-extrabold text-white mt-8">{event.title}</h1>
+      <p className="text-md text-center text-white">{event.description}</p>
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {event.prices.map((price, index) => (
             <div key={index} className="mt-10 lg:mt-0">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">{price.name}</h3>
+              <h3 className="text-lg leading-6 font-medium text-white">{price.name}</h3>
               <div className="mt-8">
                 <div className="flex items-center">
-                  <span className="font-bold text-lg text-green-800">
+                  <span className="font-bold text-lg text-white">
                     ${price.price.toFixed(2)}
                   </span>
                 </div>
@@ -51,7 +51,7 @@ export default function EditEventPage() {
           ))}
         </div>
         <button
-          className="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          className="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-indigo-700"
           onClick={() => setIsPriceFormOpen(true)}
         >
           Add Price
@@ -63,7 +63,7 @@ export default function EditEventPage() {
         />
         <Link
           to="/events"
-          className="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          className="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-indigo-700"
         >
           Done
         </Link>
