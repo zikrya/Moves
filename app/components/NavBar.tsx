@@ -20,14 +20,14 @@ const NavBar = () => {
 
   return (
     <nav
-      className="flex items-center justify-between bg-gray-600 p-6 lg:px-8"
+      className="flex items-center justify-between bg-slate-800 p-6 lg:px-8"
       aria-label="Global"
     >
       <MobileMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
 
       <div className="flex lg:flex-1">
         <NavLink to="/" className="-m-1.5 p-1.5">
-          <h1 className="font-mono text-2xl text-white">Moves</h1>
+          <h1 className="font-mono text-2xl text-indigo-500">Moves</h1>
         </NavLink>
       </div>
       <div className="flex lg:hidden">

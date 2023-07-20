@@ -12,7 +12,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
-  const { title, description, location, startsAt, endsAt } = Object.fromEntries(
+  const { title, description, location, startsAt, endsAt, refund, terms } = Object.fromEntries(
     await request.formData()
   ) as Record<keyof Prisma.EventCreateWithoutUserInput, string>;
 
@@ -24,6 +24,8 @@ export const action = async ({ request }: ActionArgs) => {
         location,
         startsAt: new Date(startsAt),
         endsAt: new Date(endsAt),
+        refund,
+        terms,
         user: {
           connect: { id: userId },
         },
@@ -41,7 +43,7 @@ export default function NewEventForm() {
   const actionData = useActionData();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-purple-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center blue-back px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8">
         <h2 className="mb-8 text-center text-3xl font-extrabold text-gray-900">
           Create Event
@@ -62,6 +64,19 @@ export default function NewEventForm() {
             <input
               id="title"
               name="title"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
+            />
+          </div>
+          <div>
+          <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Event Overview
+            </label>
+            <textarea
+              id="terms"
+              name="terms"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
             />
           </div>
@@ -116,6 +131,19 @@ export default function NewEventForm() {
               id="endsAt"
               name="endsAt"
               type="datetime-local"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
+            />
+          </div>
+          <div>
+          <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Refund Policy
+            </label>
+            <input
+              id="refund"
+              name="refund"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-base text-gray-900 shadow-sm"
             />
           </div>

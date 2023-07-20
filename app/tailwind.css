@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.your-component-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+  }
+
+  .your-component-title {
+    font-size: 2rem;
+  }
+
+  .your-component-date {
+    font-size: 1.5rem;
+  }
+
+  .your-component-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .your-component-description {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .your-component-btn {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 1rem;
+  }
+  .blue-back {
+    background-color: #002D62;
+  }
+  .blue-font {
+    color: #002D62;
+  }
