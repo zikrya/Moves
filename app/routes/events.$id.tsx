@@ -1,10 +1,11 @@
 import type { Price } from "@prisma/client";
 import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { useState, useEffect } from "react";
 import { json } from "@remix-run/server-runtime";
 import { useOptionalUser } from "~/utils";
 import { prisma } from "../db.server";
-import { useState } from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 type PriceWithCount = SerializeFrom<Price & { _count: { tickets: number } }>;
 
@@ -26,6 +27,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 const isSoldOut = (price: PriceWithCount) =>
   price.quantity ? price._count.tickets >= price.quantity : false;
 
+
 export default function Event() {
   const user = useOptionalUser();
   const event = useLoaderData<typeof loader>();
@@ -46,6 +48,36 @@ export default function Event() {
     minute: 'numeric',
     hour12: true,
   });
+
+  const [showMap, setShowMap] = useState(false);
+
+  const containerStyle = {
+    width: '400px',
+    height: '300px'
+  };
+
+  const [locationCoords, setLocationCoords] = useState({ lat: -3.745, lng: -38.523 });
+
+  const geocodeLocation = async (location: string) => {
+    try {
+      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=AIzaSyBNV00YlZJ-fKzCj8RP_8wBBYajgxrSjYA`);
+      const data = await response.json();
+
+      if (data.results && data.results[0]) {
+        setLocationCoords(data.results[0].geometry.location);
+      } else {
+        console.error("Failed to geocode location");
+      }
+    } catch (error) {
+      console.error("Geocoding error:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (event.location) {
+      geocodeLocation(event.location);
+    }
+  }, [event.location]);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const openModal = () => setModalOpen(true);
@@ -104,18 +136,51 @@ export default function Event() {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-6">
-        <div className="flex">
-          <p className="mr-4 text-white">{event.location}</p>
-          <div className="border-l border-purple-600 h-6 my-auto"></div>
-          <p className="ml-4 text-white">{formattedStartsAt}
-          <br/>
-          - {formattedEndsAt}</p>
-        </div>
+  <div className="flex">
+    <a
+      href={`https://www.google.com/maps/search/?api=1&query=${event.location ? encodeURIComponent(event.location) : ''}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mr-4 text-purple-600"
+    >
+      {event.location}
+    </a>
+    <button
+      onClick={() => {
+        if (event.location && !showMap) {
+          geocodeLocation(event.location);
+      }
+        setShowMap(!showMap);
+      }}
+      className="mt-2 btn btn-primary text-purple-600"
+    >
+      Show in Map
+    </button>
+    {showMap && (
+      <LoadScript googleMapsApiKey="AIzaSyBNV00YlZJ-fKzCj8RP_8wBBYajgxrSjYA">
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={locationCoords}
+          zoom={10}
+        >
+          {/* Adding the Marker to represent the location on the map */}
+          <Marker position={locationCoords} />
+          {/* Additional map child components, like info windows, etc. can be added below */}
+        </GoogleMap>
+      </LoadScript>
+    )}
+    <div className="border-l border-purple-600 h-6 my-auto"></div>
+    <p className="ml-4 text-white">
+      {formattedStartsAt}
+      <br />
+      - {formattedEndsAt}
+    </p>
+  </div>
+  <p className="mt-4 max-w-2xl text-xl text-white your-component-description">
+    {event.description}
+  </p>
+</div>
 
-        <p className="mt-4 max-w-2xl text-xl text-white your-component-description">
-          {event.description}
-        </p>
-      </div>
 
       {isModalOpen && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
