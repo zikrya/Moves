@@ -91,10 +91,6 @@ export default function Event() {
     }
   }, [event.location]);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
-
   const handleCheckout = (price: PriceWithCount) => {
     if (!isSoldOut(price)) {
       fetcher.submit(
