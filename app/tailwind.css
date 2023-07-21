@@ -39,3 +39,23 @@
   .blue-font {
     color: #002D62;
   }
+
+  .blurred-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(65px);
+  }
+  .the-shadow {
+    box-shadow: rgb(255, 31, 113)
+  }
+
+
+
+
