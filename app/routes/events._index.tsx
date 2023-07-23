@@ -19,7 +19,7 @@ export default function Events() {
   const { events } = useLoaderData<typeof loader>();
 
   return (
-    <div className="min-h-screen blue-back">
+    <div className="blue-back min-h-screen">
       <div className="p-4">
         <h1 className="mb-4 text-2xl text-white">Events</h1>
         <div className="grid grid-cols-3 gap-4">
@@ -27,7 +27,7 @@ export default function Events() {
             <Link
               to={`/events/${event.id}`}
               key={event.id}
-              className="block rounded border p-4 shadow bg-white"
+              className="block rounded border bg-white p-4 shadow"
             >
               <h2 className="text-xl">{event.title}</h2>
               <p>{event.description}</p>

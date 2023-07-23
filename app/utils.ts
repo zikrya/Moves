@@ -48,6 +48,18 @@ function isUser(user: any): user is User {
   return user && typeof user === "object" && typeof user.email === "string";
 }
 
+function isEnv(env: any): env is typeof process.env {
+  return env && typeof env === "object" && typeof env.NODE_ENV === "string";
+}
+
+export function useEnv(): typeof process.env {
+  const data = useMatchesData("root");
+  if (!data || !isEnv(data.ENV)) {
+    throw new Error("No env found in root loader");
+  }
+  return data.ENV;
+}
+
 export function useOptionalUser(): User | undefined {
   const data = useMatchesData("root");
   if (!data || !isUser(data.user)) {

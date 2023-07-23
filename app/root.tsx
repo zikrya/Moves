@@ -20,7 +20,13 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-  return json({ user: await getUser(request) });
+  return json({
+    user: await getUser(request),
+    ENV: {
+      NODE_ENV: process.env.NODE_ENV,
+      MAPS_API_KEY: process.env.MAPS_API_KEY,
+    },
+  });
 };
 
 export default function App() {

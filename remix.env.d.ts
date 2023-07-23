@@ -7,5 +7,6 @@ declare namespace NodeJS {
     SESSION_SECRET: string;
     STRIPE_SECRET_KEY: string;
     WEBSITE_URL: string;
+    MAPS_API_KEY: string;
   }
 }

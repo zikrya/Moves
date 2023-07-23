@@ -12,9 +12,11 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
-  const { title, description, location, startsAt, endsAt, refund, terms } = Object.fromEntries(
-    await request.formData()
-  ) as Record<keyof Prisma.EventCreateWithoutUserInput, string>;
+  const { title, description, location, startsAt, endsAt, refund, terms } =
+    Object.fromEntries(await request.formData()) as Record<
+      keyof Prisma.EventCreateWithoutUserInput,
+      string
+    >;
 
   try {
     const event = await prisma.event.create({
@@ -43,7 +45,7 @@ export default function NewEventForm() {
   const actionData = useActionData();
 
   return (
-    <div className="flex min-h-screen items-center justify-center blue-back px-4 py-12 sm:px-6 lg:px-8">
+    <div className="blue-back flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8">
         <h2 className="mb-8 text-center text-3xl font-extrabold text-gray-900">
           Create Event
@@ -68,7 +70,7 @@ export default function NewEventForm() {
             />
           </div>
           <div>
-          <label
+            <label
               htmlFor="description"
               className="block text-sm font-medium text-gray-700"
             >
@@ -135,7 +137,7 @@ export default function NewEventForm() {
             />
           </div>
           <div>
-          <label
+            <label
               htmlFor="location"
               className="block text-sm font-medium text-gray-700"
             >
