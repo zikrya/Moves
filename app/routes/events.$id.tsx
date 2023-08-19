@@ -99,7 +99,8 @@ export default function Event() {
             {user?.id === event.userId && (
               <Link
                 to={`/events/${event.id}/edit`}
-                className="your-component-btn 0 mt-4 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-purple-600 underline sm:mt-0 sm:w-auto"
+                className="your-component-btn 0 mt-4 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium underline sm:mt-0 sm:w-auto"
+                style={{ color: `${data.darkVibrant}`}}
               >
                 Edit Event
               </Link>
@@ -169,16 +170,17 @@ export default function Event() {
             </div>
             <div className="mx-auto my-6 max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex">
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${
+                <Link
+                  to={`https://www.google.com/maps/search/?api=1&query=${
                     event.location ? encodeURIComponent(event.location) : ""
                   }`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mr-4 text-purple-600"
+                  className="mr-4"
+                  style={{ color: `${data.vibrant}` }}
                 >
                   {event.location}
-                </a>
+                </Link>
                 {coordinates && isLoaded && (
                   <>
                     <button
@@ -203,7 +205,7 @@ export default function Event() {
                     )}
                   </>
                 )}
-                <div className="my-auto h-6 border-l border-purple-600"></div>
+                <div className="my-auto h-6 border-l" style={{ borderColor: `${data.vibrant}`}}></div>
                 <p className="ml-4 text-white">
                   {formattedStartsAt}
                   <br />- {formattedEndsAt}
