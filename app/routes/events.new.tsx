@@ -45,9 +45,14 @@ export default function NewEventForm() {
   const actionData = useActionData();
 
   return (
-    <div className="blue-back flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md rounded-lg bg-white p-8">
-        <h2 className="mb-8 text-center text-3xl font-extrabold text-gray-900">
+    <div className=" flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+          <div className="blurred-background lg:h-[1000vh]"
+              style={{
+                      backgroundImage: `url(${"/image-nightlife.jpg"})`,
+                    }}
+                            ></div>
+      <div className="w-full max-w-md rounded-lg bg-black p-8">
+        <h2 className="mb-8 text-center text-3xl font-extrabold text-indigo-500">
           Create Event
         </h2>
         {actionData?.error && (
@@ -59,7 +64,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Event Name
             </label>
@@ -72,7 +77,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Event Overview
             </label>
@@ -85,7 +90,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Event Description
             </label>
@@ -98,7 +103,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Event Location
             </label>
@@ -111,7 +116,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="startsAt"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Starts At
             </label>
@@ -125,7 +130,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="endsAt"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Ends At
             </label>
@@ -139,7 +144,7 @@ export default function NewEventForm() {
           <div>
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-indigo-500"
             >
               Refund Policy
             </label>
@@ -152,7 +157,7 @@ export default function NewEventForm() {
           <div>
             <button
               type="submit"
-              className="mt-4 flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="mt-4 flex w-full justify-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Create Event
             </button>

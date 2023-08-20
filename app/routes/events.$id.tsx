@@ -168,43 +168,47 @@ export default function Event() {
                         <div className="your-component-container">
 
                         <div className="lg:order-1 flex items-center">
-    <Link
-        to={`https://www.google.com/maps/search/?api=1&query=${event.location ? encodeURIComponent(event.location) : ""}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mr-4"
-        style={{ color: `${data.vibrant}` }}
-    >
-        {event.location}
-    </Link>
-    {coordinates && isLoaded && (
-        <button
-            onClick={() => setShowMap((prev) => !prev)}
-            className="btn btn-primary text-purple-600 mr-4"
-        >
-            {showMap ? "Hide Map" : "Show Map"}
-        </button>
-    )}
-    {showMap && (
-        <div className="h-[300px] w-[400px] mr-4">
-            <GoogleMap
-                mapContainerStyle={{
-                    width: "400px",
-                    height: "300px",
-                }}
-                center={coordinates}
-                zoom={10}
-            >
-                <Marker position={coordinates} />
-            </GoogleMap>
-        </div>
-    )}
-    <div className="my-auto h-6 border-l mr-4" style={{ borderColor: `${data.vibrant}` }}></div>
-    <p className="text-white">
-        {formattedStartsAt} - {formattedEndsAt}
-    </p>
+                        <Link
+                                    to={`https://www.google.com/maps/search/?api=1&query=${
+                                        event.location ? encodeURIComponent(event.location) : ""
+                                        }`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mr-4"
+                                    style={{ color: `${data.vibrant}` }}
+                                >
+                                    {event.location}
+                                </Link>
+                                {coordinates && isLoaded && (
+                                    <>
+                                        <button
+                                            onClick={() => setShowMap((prev) => !prev)}
+                                            className="btn btn-primary mt-2 text-purple-600"
+                                        >
+                                            {showMap ? "Hide Map" : "Show Map"}
+                                        </button>
+                                        {showMap && (
+                                            <div className="h-[300px] w-[400px]">
+                                                <GoogleMap
+                                                    mapContainerStyle={{
+                                                        width: "400px",
+                                                        height: "300px",
+                                                    }}
+                                                    center={coordinates}
+                                                    zoom={10}
+                                                >
+                                                    <Marker position={coordinates} />
+                                                </GoogleMap>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                                <div className="my-auto h-6 border-l" style={{ borderColor: `${data.vibrant}`}}></div>
+                                <p className="ml-4 text-white">
+                                    {formattedStartsAt}
+                                    <br />- {formattedEndsAt}
+                                </p>
 </div>
-
 
                             <p className="your-component-description mt-4 max-w-2xl text-xl text-white">
                                 {event.description}
