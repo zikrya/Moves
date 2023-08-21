@@ -18,6 +18,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function Events() {
   const { events } = useLoaderData<typeof loader>();
 
+  const carouselEvents = events.slice(0, 5);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900">
       {/* Gradient Background */}
@@ -27,10 +29,33 @@ export default function Events() {
       >
         <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
       </div>
+      <br />
+      <div className="text-center">
+    <h1 className="mb-4 text-2xl text-white inline-block relative after:content-[''] after:absolute after:h-[1px] after:w-1/2 after:bg-indigo-500 after:bottom-0 after:left-1/4">Featured Events</h1>
+</div>
 
-      {/* Content */}
+{/* Carousel */}
+<div className="mb-8 overflow-hidden">
+    <div className="flex space-x-4">
+      {carouselEvents.map((event) => (
+        <Link
+            to={`/events/${event.id}`}
+            key={event.id}
+            className="relative block rounded border border-black p-4 shadow-md hover:shadow-xl transform hover:scale-105 transition-transform duration-300 h-60 bg-cover bg-center rounded-md max-w-xl w-full"
+            style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
+        >
+            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black opacity-60">
+                <h2 className="text-xl text-white">{event.title}</h2>
+            </div>
+        </Link>
+      ))}
+    </div>
+</div>
+
       <div className="p-4">
-        <h1 className="mb-4 text-2xl text-white">Events</h1>
+      <div className="text-center">
+    <h1 className="mb-4 text-2xl text-white inline-block relative after:content-[''] after:absolute after:h-[1px] after:w-1/2 after:bg-indigo-500 after:bottom-0 after:left-1/4">Events</h1>
+</div>
         <div className="grid grid-cols-3 gap-4">
           {events.map((event) => (
             <Link
@@ -64,3 +89,4 @@ export default function Events() {
     </div>
   );
 }
+
