@@ -46,9 +46,9 @@ export default function NewEventForm() {
 
   return (
     <div className=" flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-          <div className="blurred-background lg:h-[100vh]"
+          <div className="blurred-background lg:h-[1200px]"
               style={{
-                      backgroundImage: `url(${"/image-nightlife.jpg"})`,
+                      backgroundImage: `url(${"/FEATUR1-11-1024x576.jpeg"})`,
                     }}
                             ></div>
       <div className="w-full max-w-md rounded-lg bg-black p-8">
