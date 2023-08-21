@@ -49,7 +49,7 @@ export default function PriceForm({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -63,35 +63,35 @@ export default function PriceForm({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-black text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <fetcher.Form
                   method="POST"
                   action={`/api/events/${eventId}/prices`}
                 >
-                  <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="bg-black px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indgio-500 sm:mx-0 sm:h-10 sm:w-10">
                         <TicketIcon
-                          className="h-6 w-6 text-blue-600"
+                          className="h-6 w-6 text-indigo-600"
                           aria-hidden="true"
                         />
                       </div>
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                         <Dialog.Title
                           as="h3"
-                          className="text-base font-semibold leading-6 text-gray-900"
+                          className="text-base font-semibold leading-6 text-indigo-600"
                         >
                           Create New Price
                         </Dialog.Title>
                         <div className="my-2">
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-indigo-600">
                             Create a new price for this event.
                           </p>
                         </div>
                         <div className="mb-2">
                           <label
                             htmlFor="name"
-                            className="block text-sm font-medium leading-6 text-gray-900"
+                            className="block text-sm font-medium leading-6 text-indigo-600"
                           >
                             Name
                           </label>
@@ -100,7 +100,7 @@ export default function PriceForm({
                               type="text"
                               name="name"
                               id="name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              className="block w-full rounded-md border-0 py-1.5 text-indigo-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="General Admission"
                               required
                             />
@@ -109,7 +109,7 @@ export default function PriceForm({
                         <div className="mb-2">
                           <label
                             htmlFor="price"
-                            className="block text-sm font-medium leading-6 text-gray-900"
+                            className="block text-sm font-medium leading-6 text-indigo-600"
                           >
                             Price
                           </label>
@@ -118,7 +118,7 @@ export default function PriceForm({
                               type="number"
                               name="price"
                               id="price"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              className="block w-full rounded-md border-0 py-1.5 text-indigo-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="10"
                               required
                             />
@@ -127,7 +127,7 @@ export default function PriceForm({
                         <div className="mb-2">
                           <label
                             htmlFor="quantity"
-                            className="block text-sm font-medium leading-6 text-gray-900"
+                            className="block text-sm font-medium leading-6 text-indigo-600"
                           >
                             Quantity
                           </label>
@@ -136,7 +136,7 @@ export default function PriceForm({
                               type="number"
                               name="quantity"
                               id="quantity"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              className="block w-full rounded-md border-0 py-1.5 text-indigo-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="50"
                               required
                             />
@@ -145,21 +145,13 @@ export default function PriceForm({
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <div className="bg-black px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 bg-black">
                     <button
                       type="submit"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
                       disabled={fetcher.state === "submitting"}
                     >
                       {fetcher.state === "submitting" ? "Saving..." : "Save"}
-                    </button>
-                    <button
-                      type="reset"
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                      disabled={fetcher.state === "submitting"}
-                      ref={cancelButtonRef}
-                    >
-                      Cancel
                     </button>
                   </div>
                 </fetcher.Form>
