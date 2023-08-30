@@ -1,10 +1,9 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/server-runtime";
-import { prisma } from "~/db.server"; // Assuming you have this file for your database connection
+import { prisma } from "~/db.server";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
-  // Extract the ticket ID from the params and fetch details (or verify it)
   const ticketId = params.id;
   const ticket = await prisma.ticket.findUniqueOrThrow({
     where: { id: ticketId },
@@ -14,7 +13,6 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       user: true,
     },
   });
-  // Add your verification logic here (if needed)
 
   return json(ticket);
 };
