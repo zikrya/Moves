@@ -67,3 +67,7 @@
   break-inside: avoid;
   margin-bottom: 1rem;
 }
+.contain {
+  width: 3050px;
+  height: 500px;
+}

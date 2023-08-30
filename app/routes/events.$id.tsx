@@ -3,7 +3,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/server-runtime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { prisma } from "~/db.server";
 import { useEnv, useOptionalUser } from "~/utils";
 import { Palette } from 'react-palette';
@@ -85,6 +85,14 @@ export default function Event() {
     }
   };
 
+  useEffect(() => {
+    const blurredBackground = document.querySelector('.blurred-background') as HTMLElement;
+    if (blurredBackground) {
+      blurredBackground.style.filter = 'none';
+      blurredBackground.style.backgroundColor = 'your-color-here';
+    }
+  }, []);
+
   return (
     <Palette src={"/image-nightlife.jpg"}>
         {({ data, loading, error }) => (
@@ -121,8 +129,7 @@ export default function Event() {
                                 {event.title}
                             </h1>
                             <p className="mt-2 text-lg text-white">{formattedStartsAt}</p>
-
-                            <div className="mt-8 nline-block transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
+                            <div className="mt-8 inline-block transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
                                 style={{ boxShadow: `0 0 200px ${data.vibrant}80` }}>
                                 {event.prices && event.prices.map((price) => (
                                     <div key={price.id} className="mb-4">
@@ -163,12 +170,11 @@ export default function Event() {
                         </div>
                     </div>
 
-                    {/* BOTTOM HALF */}
-                    <div className="mx-auto my-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+                    {/* BOTTOM HALF with a black background */}
+                    <div className="mx-auto my-6 max-w-7xl px-4 sm:px-6 lg:px-8 bg-black contain">
                         <div className="your-component-container">
-
-                        <div className="lg:order-1 flex items-center">
-                        <Link
+                            <div className="lg:order-1 flex items-center">
+                                <Link
                                     to={`https://www.google.com/maps/search/?api=1&query=${
                                         event.location ? encodeURIComponent(event.location) : ""
                                         }`}
@@ -208,7 +214,7 @@ export default function Event() {
                                     {formattedStartsAt}
                                     <br />- {formattedEndsAt}
                                 </p>
-</div>
+                            </div>
 
                             <p className="your-component-description mt-4 max-w-2xl text-xl text-white">
                                 {event.description}
