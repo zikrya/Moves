@@ -1,104 +1,117 @@
 import {
   ArrowPathIcon,
-  ChevronRightIcon,
   CloudArrowUpIcon,
   Cog6ToothIcon,
   FingerPrintIcon,
   LockClosedIcon,
-  ServerIcon,
-} from '@heroicons/react/20/solid'
-import { BoltIcon, CalendarDaysIcon,TicketIcon, UsersIcon } from '@heroicons/react/24/outline'
-import { V2_MetaFunction } from '@remix-run/node'
-import { Link } from '@remix-run/react'
+  ServerIcon
+} from "@heroicons/react/20/solid";
+import {
+  BoltIcon,
+  TicketIcon,
+  UsersIcon
+} from "@heroicons/react/24/outline";
+import type { V2_MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import type { SVGProps } from "react";
 
 const primaryFeatures = [
   {
-    name: 'Promote events',
-    description: 'Drive conversions and grow your audience with beautiful event pages and powerful marketing tools.',
-    href: '#',
+    name: "Promote events",
+    description:
+      "Drive conversions and grow your audience with beautiful event pages and powerful marketing tools.",
+    href: "#",
     icon: UsersIcon,
   },
   {
-    name: 'Sell tickets',
-    description: 'Easily sell tickets online and at the door at no cost to you. View sales and stats in real time.',
-    href: '#',
+    name: "Sell tickets",
+    description:
+      "Easily sell tickets online and at the door at no cost to you. View sales and stats in real time.",
+    href: "#",
     icon: TicketIcon,
   },
   {
-    name: 'Grow your brand',
-    description: 'Engage your audience with organization pages and branding tools.',
-    href: '#',
+    name: "Grow your brand",
+    description:
+      "Engage your audience with organization pages and branding tools.",
+    href: "#",
     icon: BoltIcon,
   },
-]
+];
 const secondaryFeatures = [
   {
-    name: 'Push to deploy.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Push to deploy.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "SSL certificates.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: LockClosedIcon,
   },
   {
-    name: 'Simple queues.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.',
+    name: "Simple queues.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
     icon: ArrowPathIcon,
   },
   {
-    name: 'Advanced security.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Advanced security.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: FingerPrintIcon,
   },
   {
-    name: 'Powerful API.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "Powerful API.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: Cog6ToothIcon,
   },
   {
-    name: 'Database backups.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. ',
+    name: "Database backups.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. ",
     icon: ServerIcon,
   },
-]
+];
 const stats = [
-  { id: 1, name: 'Developers on the platform', value: '8,000+' },
-  { id: 2, name: 'Daily requests', value: '900m+' },
-  { id: 3, name: 'Uptime guarantee', value: '99.9%' },
-  { id: 4, name: 'Projects deployed', value: '12m' },
-]
+  { id: 1, name: "Developers on the platform", value: "8,000+" },
+  { id: 2, name: "Daily requests", value: "900m+" },
+  { id: 3, name: "Uptime guarantee", value: "99.9%" },
+  { id: 4, name: "Projects deployed", value: "12m" },
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Hosting', href: '#' },
-    { name: 'Data Services', href: '#' },
-    { name: 'Uptime Monitoring', href: '#' },
-    { name: 'Enterprise Services', href: '#' },
+    { name: "Hosting", href: "#" },
+    { name: "Data Services", href: "#" },
+    { name: "Uptime Monitoring", href: "#" },
+    { name: "Enterprise Services", href: "#" },
   ],
   support: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
-    { name: 'API Reference', href: '#' },
+    { name: "Pricing", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
+    { name: "API Reference", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Partners', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Partners", href: "#" },
   ],
   legal: [
-    { name: 'Claim', href: '#' },
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
+    { name: "Claim", href: "#" },
+    { name: "Privacy", href: "#" },
+    { name: "Terms", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
-      icon: (props) => (
+      name: "Facebook",
+      href: "#",
+      icon: (props: SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
             fillRule="evenodd"
@@ -109,9 +122,9 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
-      icon: (props) => (
+      name: "Instagram",
+      href: "#",
+      icon: (props: SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
             fillRule="evenodd"
@@ -122,18 +135,18 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Twitter',
-      href: '#',
-      icon: (props) => (
+      name: "Twitter",
+      href: "#",
+      icon: (props: SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
         </svg>
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
-      icon: (props) => (
+      name: "GitHub",
+      href: "#",
+      icon: (props: SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
             fillRule="evenodd"
@@ -144,9 +157,9 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
-      icon: (props) => (
+      name: "YouTube",
+      href: "#",
+      icon: (props: SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
             fillRule="evenodd"
@@ -157,11 +170,9 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
-export const meta: V2_MetaFunction = () => [
-  { title: "Moves" }
-];
+export const meta: V2_MetaFunction = () => [{ title: "Moves" }];
 
 export default function Example() {
   return (
@@ -191,7 +202,12 @@ export default function Example() {
                 strokeWidth={0}
               />
             </svg>
-            <rect width="100%" height="100%" strokeWidth={0} fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" />
+            <rect
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+              fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
+            />
           </svg>
           <div
             className="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
@@ -201,7 +217,7 @@ export default function Example() {
               className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20"
               style={{
                 clipPath:
-                  'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                  "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
               }}
             />
           </div>
@@ -213,19 +229,25 @@ export default function Example() {
                 alt="Your Company"
               />
               <h1 className="mt-32 text-4xl font-bold text-white sm:text-6xl">
-                <span className="block">Pay less.</span>{" "}<span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-600">Party more.</span>
+                <span className="block">Pay less.</span>{" "}
+                <span className="block bg-gradient-to-r from-indigo-400 to-pink-600 bg-clip-text text-transparent">
+                  Party more.
+                </span>
               </h1>
-              <p className="tracking-wide mt-6 text-lg leading-8 text-gray-300">
+              <p className="mt-6 text-lg leading-8 tracking-wide text-gray-300">
                 Moves is the simplest way to host, promote, and sell events.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <Link
                   to="/events/new"
-                  className="tracking-wide rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                  className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold tracking-wide text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
                 >
                   Host an event
                 </Link>
-                <Link to="/events" className="tracking-wide text-sm font-semibold leading-6 text-white">
+                <Link
+                  to="/events"
+                  className="text-sm font-semibold leading-6 tracking-wide text-white"
+                >
                   View events <span aria-hidden="true">→</span>
                 </Link>
               </div>
@@ -247,7 +269,9 @@ export default function Example() {
         {/* Feature section */}
         <div className="mx-auto mt-8 max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-base font-semibold leading-7 text-indigo-400">Why Moves?</h2>
+            <h2 className="text-base font-semibold leading-7 text-indigo-400">
+              Why Moves?
+            </h2>
             <p className="mt-2 text-3xl font-bold text-white sm:text-4xl">
               Everything you need for your event
             </p>
@@ -261,14 +285,20 @@ export default function Example() {
                 <div key={feature.name} className="flex flex-col">
                   <dt className="text-base font-semibold leading-7 text-white">
                     <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500">
-                      <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <feature.icon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
                     </div>
                     {feature.name}
                   </dt>
                   <dd className="mt-1 flex flex-auto flex-col text-base leading-7 text-gray-300">
                     <p className="flex-auto">{feature.description}</p>
                     <p className="mt-6">
-                      <a href={feature.href} className="text-sm font-semibold leading-6 text-indigo-400">
+                      <a
+                        href={feature.href}
+                        className="text-sm font-semibold leading-6 text-indigo-400"
+                      >
                         Learn more <span aria-hidden="true">→</span>
                       </a>
                     </p>
@@ -283,10 +313,15 @@ export default function Example() {
         <div className="mt-32 sm:mt-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
-              <h2 className="text-base font-semibold leading-7 text-indigo-400">Build your brand</h2>
-              <p className="mt-2 text-3xl font-bold text-white sm:text-4xl">Customizable event pages</p>
+              <h2 className="text-base font-semibold leading-7 text-indigo-400">
+                Build your brand
+              </h2>
+              <p className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                Customizable event pages
+              </p>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Choose the colors, fonts, and layout for your event pages. Add your logo and custom domain to make your brand stand out.
+                Choose the colors, fonts, and layout for your event pages. Add
+                your logo and custom domain to make your brand stand out.
               </p>
             </div>
           </div>
@@ -309,9 +344,12 @@ export default function Example() {
               {secondaryFeatures.map((feature) => (
                 <div key={feature.name} className="relative pl-9">
                   <dt className="inline font-semibold text-white">
-                    <feature.icon className="absolute left-1 top-1 h-5 w-5 text-indigo-500" aria-hidden="true" />
+                    <feature.icon
+                      className="absolute left-1 top-1 h-5 w-5 text-indigo-500"
+                      aria-hidden="true"
+                    />
                     {feature.name}
-                  </dt>{' '}
+                  </dt>{" "}
                   <dd className="inline">{feature.description}</dd>
                 </div>
               ))}
@@ -322,20 +360,28 @@ export default function Example() {
         {/* Stats */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
-            <h2 className="text-base font-semibold leading-8 text-indigo-400">Our track record</h2>
+            <h2 className="text-base font-semibold leading-8 text-indigo-400">
+              Our track record
+            </h2>
             <p className="mt-2 text-3xl font-bold text-white sm:text-4xl">
               Trusted by thousands of developers&nbsp;worldwide
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
-              dolor cupiditate blanditiis ratione.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
+              impedit perferendis suscipit eaque, iste dolor cupiditate
+              blanditiis ratione.
             </p>
           </div>
           <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 text-white sm:mt-20 sm:grid-cols-2 sm:gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.id} className="flex flex-col gap-y-3 border-l border-white/10 pl-6">
+              <div
+                key={stat.id}
+                className="flex flex-col gap-y-3 border-l border-white/10 pl-6"
+              >
                 <dt className="text-sm leading-6">{stat.name}</dt>
-                <dd className="order-first text-3xl font-semibold">{stat.value}</dd>
+                <dd className="order-first text-3xl font-semibold">
+                  {stat.value}
+                </dd>
               </div>
             ))}
           </dl>
@@ -365,7 +411,12 @@ export default function Example() {
                 strokeWidth={0}
               />
             </svg>
-            <rect width="100%" height="100%" strokeWidth={0} fill="url(#1d4240dd-898f-445f-932d-e2872fd12de3)" />
+            <rect
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+              fill="url(#1d4240dd-898f-445f-932d-e2872fd12de3)"
+            />
           </svg>
           <div
             className="absolute inset-x-0 top-10 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl"
@@ -375,7 +426,7 @@ export default function Example() {
               className="aspect-[1108/632] w-[69.25rem] flex-none bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20"
               style={{
                 clipPath:
-                  'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                  "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
               }}
             />
           </div>
@@ -393,7 +444,10 @@ export default function Example() {
               >
                 Host an event
               </Link>
-              <Link to="/events" className="text-sm font-semibold leading-6 text-white">
+              <Link
+                to="/events"
+                className="text-sm font-semibold leading-6 text-white"
+              >
                 View events <span aria-hidden="true">→</span>
               </Link>
             </div>
@@ -410,7 +464,11 @@ export default function Example() {
           <div className="border-t border-white/10 pt-8 md:flex md:items-center md:justify-between">
             <div className="flex space-x-6 md:order-2">
               {footerNavigation.social.map((item) => (
-                <a key={item.name} href={item.href} className="text-gray-500 hover:text-gray-400">
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-400"
+                >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
                 </a>
@@ -423,5 +481,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

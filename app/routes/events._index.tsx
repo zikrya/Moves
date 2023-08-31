@@ -26,7 +26,9 @@ export default function Events() {
       </div>
       <br />
       <div className="text-center">
-        <h1 className="mb-4 text-2xl text-white inline-block relative after:content-[''] after:absolute after:h-[1px] after:w-1/2 after:bg-indigo-500 after:bottom-0 after:left-1/4">Featured Events</h1>
+        <h1 className="relative mb-4 inline-block text-2xl text-white after:absolute after:bottom-0 after:left-1/4 after:h-[1px] after:w-1/2 after:bg-indigo-500 after:content-['']">
+          Featured Events
+        </h1>
       </div>
 
       {/* Carousel */}
@@ -36,10 +38,10 @@ export default function Events() {
             <Link
               to={`/events/${event.id}`}
               key={event.id}
-              className="relative block rounded border border-black p-4 shadow-md hover:shadow-xl transform hover:scale-105 transition-transform duration-300 h-60 bg-cover bg-center max-w-xl w-full"
+              className="relative block h-60 w-full max-w-xl transform rounded border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
               style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
             >
-              <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black opacity-60">
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black p-4 opacity-60">
                 <h2 className="text-xl text-white">{event.title}</h2>
               </div>
             </Link>
@@ -49,17 +51,19 @@ export default function Events() {
 
       <div className="p-4">
         <div className="text-center">
-          <h1 className="mb-4 text-2xl text-white inline-block relative after:content-[''] after:absolute after:h-[1px] after:w-1/2 after:bg-indigo-500 after:bottom-0 after:left-1/4">Events</h1>
+          <h1 className="relative mb-4 inline-block text-2xl text-white after:absolute after:bottom-0 after:left-1/4 after:h-[1px] after:w-1/2 after:bg-indigo-500 after:content-['']">
+            Events
+          </h1>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {events.map((event) => (
             <Link
               to={`/events/${event.id}`}
               key={event.id}
-              className="relative block rounded border border-black p-4 shadow-md hover:shadow-xl transform hover:scale-105 transition-transform duration-300 h-60 bg-cover bg-center rounded-md"
+              className="relative block h-60 transform rounded rounded-md border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
               style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
             >
-              <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black opacity-60">
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black p-4 opacity-60">
                 <h2 className="text-xl text-white">{event.title}</h2>
               </div>
 
@@ -84,4 +88,3 @@ export default function Events() {
     </div>
   );
 }
-

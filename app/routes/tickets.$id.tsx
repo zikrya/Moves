@@ -26,7 +26,6 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 export default function Event() {
   const { event, price, ...ticket } = useLoaderData<typeof loader>();
 
-
   const verificationUrl = `http://localhost:3000/verification/${ticket.id}`;
 
   return (

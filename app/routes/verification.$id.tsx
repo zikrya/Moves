@@ -24,9 +24,10 @@ export default function TicketVerification() {
     <div>
       <h1>Ticket Verification</h1>
       <p>Event: {event.title}</p>
-      <p>Price: {price.name} - ${price.price}</p>
+      <p>
+        Price: {price.name} - ${price.price}
+      </p>
       <p>Location: {event.location}</p>
     </div>
   );
 }
-

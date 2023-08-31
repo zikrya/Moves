@@ -6,7 +6,7 @@ import { json } from "@remix-run/server-runtime";
 import { useEffect, useState } from "react";
 import { prisma } from "~/db.server";
 import { useEnv, useOptionalUser } from "~/utils";
-import { Palette } from 'react-palette';
+import { Palette } from "react-palette";
 
 type PriceWithCount = SerializeFrom<Price & { _count: { tickets: number } }>;
 
@@ -86,144 +86,154 @@ export default function Event() {
   };
 
   useEffect(() => {
-    const blurredBackground = document.querySelector('.blurred-background') as HTMLElement;
+    const blurredBackground = document.querySelector(
+      ".blurred-background"
+    ) as HTMLElement;
     if (blurredBackground) {
-      blurredBackground.style.filter = 'none';
-      blurredBackground.style.backgroundColor = 'your-color-here';
+      blurredBackground.style.filter = "none";
+      blurredBackground.style.backgroundColor = "your-color-here";
     }
   }, []);
 
   return (
     <Palette src={"/image-nightlife.jpg"}>
-        {({ data, loading, error }) => (
-            <>
-                <div className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
-                    {/* TOP HALF */}
-                    <div className="flex flex-col lg:flex-row mx-auto max-w-7xl">
-                        <div className="lg:w-1/2 relative">
-                            <div
-                                className="blurred-background lg:h-[1000vh]"
-                                style={{
-                                    backgroundImage: `url(${"/image-nightlife.jpg"})`,
-                                }}
-                            ></div>
-                            <img
-                                src="/image-nightlife.jpg"
-                                alt={event.title}
-                                className="h-56 w-full object-cover lg:h-auto lg:rounded-lg"
-                            />
-                            <br />
-                            <br />
-                            {user?.id === event.userId && (
-                                <Link
-                                    to={`/events/${event.id}/edit`}
-                                    className="absolute bottom-0 left-0 mt-4 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium underline sm:mt-0 sm:w-auto"
-                                    style={{ color: `${data.darkVibrant}` }}
-                                >
-                                    Edit Event
-                                </Link>
-                            )}
-                        </div>
-                        <div className="flex flex-col justify-end lg:w-1/2 lg:pl-8 h-full mt-20 lg:mt-32">
-                            <h1 className="text-3xl font-extrabold leading-8 tracking-tight text-white sm:text-4xl">
-                                {event.title}
-                            </h1>
-                            <p className="mt-2 text-lg text-white">{formattedStartsAt}</p>
-                            <div className="mt-8 inline-block transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
-                                style={{ boxShadow: `0 0 200px ${data.vibrant}80` }}>
-                                {event.prices && event.prices.map((price) => (
-                                    <div key={price.id} className="mb-4">
-                                        <p className="text-sm text-white">
-                                            <span className="font-medium">Ticket Type: </span>
-                                            {price.name}
-                                        </p>
-                                        <p className="text-sm text-white">
-                                            <span className="font-medium">Price: </span> $
-                                            {price.price}
-                                        </p>
-                                        <button
-                                            onClick={() => handleCheckout(price)}
-                                            disabled={isSoldOut(price)}
-                                            style={{
-                                                backgroundColor: isSoldOut(price)
-                                                    ? 'gray'
-                                                    : (fetcher.state === "submitting"
-                                                        ? data.vibrant
-                                                        : data.vibrant)
-                                            }}
-                                            className="flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white mt-2"
-                                        >
-                                            {isSoldOut(price)
-                                                ? "Sold Out"
-                                                : fetcher.state === "submitting"
-                                                    ? "Processing..."
-                                                    : "Buy Ticket"}
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-center mt-4">
-                        <div className="border-t-2 pt-4 w-1/2" style={{ borderColor: `${data.vibrant}` }}>
-                        </div>
-                    </div>
-
-                    {/* BOTTOM HALF with a black background */}
-                    <div className="mx-auto my-6 max-w-7xl px-4 sm:px-6 lg:px-8 bg-black contain">
-                        <div className="your-component-container">
-                            <div className="lg:order-1 flex items-center">
-                                <Link
-                                    to={`https://www.google.com/maps/search/?api=1&query=${
-                                        event.location ? encodeURIComponent(event.location) : ""
-                                        }`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="mr-4"
-                                    style={{ color: `${data.vibrant}` }}
-                                >
-                                    {event.location}
-                                </Link>
-                                {coordinates && isLoaded && (
-                                    <>
-                                        <button
-                                            onClick={() => setShowMap((prev) => !prev)}
-                                            className="btn btn-primary mt-2 text-purple-600"
-                                        >
-                                            {showMap ? "Hide Map" : "Show Map"}
-                                        </button>
-                                        {showMap && (
-                                            <div className="h-[300px] w-[400px]">
-                                                <GoogleMap
-                                                    mapContainerStyle={{
-                                                        width: "400px",
-                                                        height: "300px",
-                                                    }}
-                                                    center={coordinates}
-                                                    zoom={10}
-                                                >
-                                                    <Marker position={coordinates} />
-                                                </GoogleMap>
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-                                <div className="my-auto h-6 border-l" style={{ borderColor: `${data.vibrant}`}}></div>
-                                <p className="ml-4 text-white">
-                                    {formattedStartsAt}
-                                    <br />- {formattedEndsAt}
-                                </p>
-                            </div>
-
-                            <p className="your-component-description mt-4 max-w-2xl text-xl text-white">
-                                {event.description}
-                            </p>
-                        </div>
-                    </div>
+      {({ data, loading, error }) => (
+        <>
+          <div className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+            {/* TOP HALF */}
+            <div className="mx-auto flex max-w-7xl flex-col lg:flex-row">
+              <div className="relative lg:w-1/2">
+                <div
+                  className="blurred-background lg:h-[1000vh]"
+                  style={{
+                    backgroundImage: `url(${"/image-nightlife.jpg"})`,
+                  }}
+                ></div>
+                <img
+                  src="/image-nightlife.jpg"
+                  alt={event.title}
+                  className="h-56 w-full object-cover lg:h-auto lg:rounded-lg"
+                />
+                <br />
+                <br />
+                {user?.id === event.userId && (
+                  <Link
+                    to={`/events/${event.id}/edit`}
+                    className="absolute bottom-0 left-0 mt-4 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium underline sm:mt-0 sm:w-auto"
+                    style={{ color: `${data.darkVibrant}` }}
+                  >
+                    Edit Event
+                  </Link>
+                )}
+              </div>
+              <div className="mt-20 flex h-full flex-col justify-end lg:mt-32 lg:w-1/2 lg:pl-8">
+                <h1 className="text-3xl font-extrabold leading-8 tracking-tight text-white sm:text-4xl">
+                  {event.title}
+                </h1>
+                <p className="mt-2 text-lg text-white">{formattedStartsAt}</p>
+                <div
+                  className="mt-8 inline-block transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
+                  style={{ boxShadow: `0 0 200px ${data.vibrant}80` }}
+                >
+                  {event.prices &&
+                    event.prices.map((price) => (
+                      <div key={price.id} className="mb-4">
+                        <p className="text-sm text-white">
+                          <span className="font-medium">Ticket Type: </span>
+                          {price.name}
+                        </p>
+                        <p className="text-sm text-white">
+                          <span className="font-medium">Price: </span> $
+                          {price.price}
+                        </p>
+                        <button
+                          onClick={() => handleCheckout(price)}
+                          disabled={isSoldOut(price)}
+                          style={{
+                            backgroundColor: isSoldOut(price)
+                              ? "gray"
+                              : fetcher.state === "submitting"
+                              ? data.vibrant
+                              : data.vibrant,
+                          }}
+                          className="mt-2 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white"
+                        >
+                          {isSoldOut(price)
+                            ? "Sold Out"
+                            : fetcher.state === "submitting"
+                            ? "Processing..."
+                            : "Buy Ticket"}
+                        </button>
+                      </div>
+                    ))}
                 </div>
-            </>
-        )}
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-center">
+              <div
+                className="w-1/2 border-t-2 pt-4"
+                style={{ borderColor: `${data.vibrant}` }}
+              ></div>
+            </div>
+
+            {/* BOTTOM HALF with a black background */}
+            <div className="contain mx-auto my-6 max-w-7xl bg-black px-4 sm:px-6 lg:px-8">
+              <div className="your-component-container">
+                <div className="flex items-center lg:order-1">
+                  <Link
+                    to={`https://www.google.com/maps/search/?api=1&query=${
+                      event.location ? encodeURIComponent(event.location) : ""
+                    }`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mr-4"
+                    style={{ color: `${data.vibrant}` }}
+                  >
+                    {event.location}
+                  </Link>
+                  {coordinates && isLoaded && (
+                    <>
+                      <button
+                        onClick={() => setShowMap((prev) => !prev)}
+                        className="btn btn-primary mt-2 text-purple-600"
+                      >
+                        {showMap ? "Hide Map" : "Show Map"}
+                      </button>
+                      {showMap && (
+                        <div className="h-[300px] w-[400px]">
+                          <GoogleMap
+                            mapContainerStyle={{
+                              width: "400px",
+                              height: "300px",
+                            }}
+                            center={coordinates}
+                            zoom={10}
+                          >
+                            <Marker position={coordinates} />
+                          </GoogleMap>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  <div
+                    className="my-auto h-6 border-l"
+                    style={{ borderColor: `${data.vibrant}` }}
+                  ></div>
+                  <p className="ml-4 text-white">
+                    {formattedStartsAt}
+                    <br />- {formattedEndsAt}
+                  </p>
+                </div>
+
+                <p className="your-component-description mt-4 max-w-2xl text-xl text-white">
+                  {event.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </Palette>
-);
+  );
 }
