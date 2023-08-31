@@ -8,6 +8,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "@remix-run/react";
 
 import { getUser } from "~/session.server";
@@ -17,6 +18,10 @@ import NavBar from "./components/NavBar";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  {
+    rel: "stylesheet",
+    href: "https://api.fontshare.com/css?f[]=general-sans@400,500,600,700&display=swap",
+  },
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -30,6 +35,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function App() {
+  const location = useLocation();
+  const showNavBar = location.pathname !== "/";
+
   return (
     <html lang="en" className="h-full">
       <head>
@@ -39,7 +47,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <NavBar />
+        {showNavBar && <NavBar />}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
