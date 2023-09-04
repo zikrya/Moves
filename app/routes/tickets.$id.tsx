@@ -26,7 +26,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 export default function Event() {
   const { event, price, ...ticket } = useLoaderData<typeof loader>();
 
-  const verificationUrl = `http://localhost:3000/verification/${ticket.id}`;
+  const verificationUrl = `http://localhost:3000/${ticket.id}`;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-200 px-4 py-12 sm:px-6 lg:px-8">
