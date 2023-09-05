@@ -4,13 +4,9 @@ import {
   Cog6ToothIcon,
   FingerPrintIcon,
   LockClosedIcon,
-  ServerIcon
+  ServerIcon,
 } from "@heroicons/react/20/solid";
-import {
-  BoltIcon,
-  TicketIcon,
-  UsersIcon
-} from "@heroicons/react/24/outline";
+import { BoltIcon, TicketIcon, UsersIcon } from "@heroicons/react/24/outline";
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import type { SVGProps } from "react";

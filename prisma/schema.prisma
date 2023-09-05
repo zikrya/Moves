@@ -28,7 +28,7 @@ model Password {
 }
 
 model Event {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   description String
   location    String?
@@ -36,7 +36,7 @@ model Event {
   startsAt    DateTime
   endsAt      DateTime
   refund      String?
-  terms   String?
+  terms       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,8 +65,9 @@ model Ticket {
   id              String @id @default(cuid())
   stripePaymentId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  validatedAt DateTime?
 
   event   Event  @relation(fields: [eventId], references: [id])
   eventId String

@@ -1,5 +1,5 @@
-import type { Request, Response } from 'express';
-import { prisma } from './db.server';
+import type { Request, Response } from "express";
+import { prisma } from "./db.server";
 
 async function validateTicket(req: Request, res: Response) {
   const { ticketId } = req.params;
@@ -15,17 +15,17 @@ async function validateTicket(req: Request, res: Response) {
     });
 
     if (!ticket) {
-      return res.status(404).json({ message: 'Ticket not found' });
+      return res.status(404).json({ message: "Ticket not found" });
     }
 
     if (ticket && ticket.event && ticket.user) {
-      return res.status(200).json({ message: 'Ticket is valid', ticket });
+      return res.status(200).json({ message: "Ticket is valid", ticket });
     } else {
-      return res.status(400).json({ message: 'Ticket is invalid' });
+      return res.status(400).json({ message: "Ticket is invalid" });
     }
   } catch (error) {
-    console.error('Validation failed:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Validation failed:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

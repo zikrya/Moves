@@ -20,19 +20,18 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       status: 403,
     });
   }
-  return json(ticket);
+  const url = `${process.env.WEBSITE_URL}/tickets/${ticket.id}`;
+  return json({ ...ticket, url });
 };
 
-export default function Event() {
-  const { event, price, ...ticket } = useLoaderData<typeof loader>();
-
-  const verificationUrl = `http://localhost:3000/${ticket.id}`;
+export default function Ticket() {
+  const { event, price, url, ...ticket } = useLoaderData<typeof loader>();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-200 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <h1 className="text-center text-3xl font-bold text-gray-800">Ticket</h1>
-        <QRCode value={verificationUrl} className="mx-auto my-4" />
+        <QRCode value={url} className="mx-auto my-4" />
 
         <p className="text-gray-700">
           <span className="font-bold">Price: </span>
