@@ -1,7 +1,7 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
+import { useRef, useState } from "react";
 import type { OnResultFunction } from "react-qr-reader";
 import { QrReader } from "react-qr-reader";
 import { prisma } from "~/db.server";
@@ -30,7 +30,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   try {
     const ticket = await prisma.ticket.findUnique({
       where: { id: ticketId },
-      include: { event: true, user: true },
+      include: { event: true, user: true, price: true },
     });
 
     if (!ticket) {
@@ -63,11 +63,13 @@ export const action = async ({ params, request }: ActionArgs) => {
 
 export default function ScanPage() {
   const event = useLoaderData<typeof loader>();
-  const fetcher = useFetcher<typeof action>();
+  const result = useActionData<typeof action>();
   const [isActive, setIsActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const submit = useSubmit();
+  const lastTicketIdRef = useRef<string>();
 
-  const handleRequestPermission = () => {
+  const handleStartCamera = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(() => {
@@ -88,9 +90,12 @@ export default function ScanPage() {
       setError("Invalid QR code");
       return;
     }
+    if (lastTicketIdRef.current === ticketId) {
+      return;
+    }
+    lastTicketIdRef.current = ticketId;
+    submit({ ticketId }, { method: "POST" });
     setError(null);
-    const data = { ticketId };
-    fetcher.submit(data, { action: "/api/validate" });
   };
 
   return (
@@ -103,24 +108,32 @@ export default function ScanPage() {
           <QrReader
             onResult={handleResult}
             constraints={{ height: 400, width: 400 }}
+            scanDelay={100}
           />
           <button onClick={() => setIsActive(false)}>Stop Scanner</button>
         </>
       ) : (
-        <button onClick={handleRequestPermission}>Start Scanner</button>
+        <button onClick={handleStartCamera}>Start Scanner</button>
       )}
-      {fetcher.data && (
+      {result && (
         <div>
-          <p>{fetcher.data.valid ? "Valid Ticket" : "Invalid Ticket"}</p>
-          <p>{"message" in fetcher.data && fetcher.data.message}</p>
-          {"ticket" in fetcher.data && (
+          <p className="text-2xl font-bold">
+            {result.valid ? "Valid Ticket" : "Invalid Ticket"}
+          </p>
+          <p>{"message" in result && result.message}</p>
+          {"ticket" in result && (
             <div>
-              <h2 className="mb-4 text-center text-2xl font-bold text-gray-800">
-                User
-              </h2>
               <p className="text-gray-700">
                 <span className="font-bold">Email: </span>
-                {fetcher.data.ticket.user.email}
+                {result.ticket.user.email}
+              </p>
+              <p className="text-gray-700">
+                <span className="font-bold">Price: </span>
+                {result.ticket.price.name} - ${result.ticket.price.price}
+              </p>
+              <p className="text-gray-700">
+                <span className="font-bold">Purchase Date: </span>
+                {new Date(result.ticket.createdAt).toLocaleString()}
               </p>
             </div>
           )}

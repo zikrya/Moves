@@ -60,7 +60,7 @@ export default function Events() {
             <Link
               to={`/events/${event.id}`}
               key={event.id}
-              className="relative block h-60 transform rounded rounded-md border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+              className="relative block h-60 transform rounded border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
               style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
             >
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black p-4 opacity-60">
