@@ -39,7 +39,7 @@ export default function Events() {
               to={`/events/${event.id}`}
               key={event.id}
               className="relative block h-60 w-full max-w-xl transform rounded border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
-              style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
+              style={{ backgroundImage: `url('${event.imageURL}')` }}
             >
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black p-4 opacity-60">
                 <h2 className="text-xl text-white">{event.title}</h2>
@@ -61,7 +61,7 @@ export default function Events() {
               to={`/events/${event.id}`}
               key={event.id}
               className="relative block h-60 transform rounded border border-black bg-cover bg-center p-4 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl"
-              style={{ backgroundImage: `url('/image-nightlife.jpg')` }}
+              style={{ backgroundImage: `url('${event.imageURL}')` }}
             >
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black p-4 opacity-60">
                 <h2 className="text-xl text-white">{event.title}</h2>

@@ -47,7 +47,10 @@ export const action = async ({ params, request }: ActionArgs) => {
     }
     if (ticket.usedAt) {
       return json(
-        { valid: false, message: `Ticket already used at ${ticket.usedAt.toDateString()}` },
+        {
+          valid: false,
+          message: `Ticket already used at ${ticket.usedAt.toDateString()}`,
+        },
         { status: 400 }
       );
     }

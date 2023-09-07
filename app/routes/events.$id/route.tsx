@@ -47,7 +47,7 @@ export default function EventPage() {
   });
 
   return (
-    <Palette src={"/image-nightlife.jpg"}>
+    <Palette src={event.imageURL!}>
       {({ data, loading, error }) => (
         <>
           <div className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
@@ -57,11 +57,11 @@ export default function EventPage() {
                 <div
                   className="blurred-background lg:h-[1000vh]"
                   style={{
-                    backgroundImage: `url(${"/image-nightlife.jpg"})`,
+                    backgroundImage: `url(${event.imageURL!})`,
                   }}
                 ></div>
                 <img
-                  src="/image-nightlife.jpg"
+                  src={event.imageURL!}
                   alt={event.title}
                   className="h-56 w-full object-cover lg:h-auto lg:rounded-lg"
                 />
