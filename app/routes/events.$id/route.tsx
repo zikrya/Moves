@@ -1,99 +1,50 @@
-import type { Price } from "@prisma/client";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
-import { json } from "@remix-run/server-runtime";
+import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { prisma } from "~/db.server";
-import { useEnv, useOptionalUser } from "~/utils";
 import { Palette } from "react-palette";
+import { useTypedActionData, useTypedLoaderData } from "remix-typedjson";
+import { useEnv, useOptionalUser } from "~/utils";
+import { action } from "./action";
+import { loader } from "./loader";
+import { useCart } from "./useCart";
 
-type PriceWithCount = SerializeFrom<Price & { _count: { tickets: number } }>;
+export { action, loader };
 
-export const loader = async ({ params }: LoaderArgs) => {
-  const event = await prisma.event.findUniqueOrThrow({
-    where: { id: params.id },
-    include: {
-      prices: {
-        include: {
-          _count: true,
-        },
-      },
-      user: true,
-    },
-  });
-  const coordinates = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-      event.location!
-    )}&key=${process.env.MAPS_API_KEY}`
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.status === "OK") {
-        return data.results[0].geometry.location as {
-          lat: number;
-          lng: number;
-        };
-      }
-      throw new Error(data.status);
-    })
-    .catch((err) => {
-      console.error(`Geocoding failed for location "${event.location}"`, err);
-      return null;
-    });
-  return json({ event, coordinates });
-};
-
-const isSoldOut = (price: PriceWithCount) =>
-  price.quantity ? price._count.tickets >= price.quantity : false;
-
-export default function Event() {
+export default function EventPage() {
   const user = useOptionalUser();
-  const { event, coordinates } = useLoaderData<typeof loader>();
+  const { event, coordinates } = useTypedLoaderData<typeof loader>();
+  const actionData = useTypedActionData<typeof action>();
   const { MAPS_API_KEY } = useEnv();
-  const fetcher = useFetcher();
+  const { allItems, cart, checkout, state } = useCart();
   const [showMap, setShowMap] = useState(false);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: MAPS_API_KEY,
   });
-  const formattedStartsAt = new Date(event.startsAt).toLocaleString("en-US", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  });
-  const formattedEndsAt = new Date(event.endsAt).toLocaleString("en-US", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  });
-
-  const handleCheckout = (price: PriceWithCount) => {
-    if (!isSoldOut(price)) {
-      fetcher.submit(
-        { priceId: price.id },
-        {
-          method: "POST",
-          action: "/api/checkout",
-        }
-      );
-    }
-  };
+  const [isErrorShown, setIsErrorShown] = useState(false);
 
   useEffect(() => {
-    const blurredBackground = document.querySelector(
-      ".blurred-background"
-    ) as HTMLElement;
-    if (blurredBackground) {
-      blurredBackground.style.filter = "none";
-      blurredBackground.style.backgroundColor = "your-color-here";
+    if (actionData?.message) {
+      setIsErrorShown(true);
     }
-  }, []);
+  }, [actionData]);
+
+  const formattedStartsAt = event.startsAt.toLocaleString("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+  const formattedEndsAt = event.endsAt.toLocaleString("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
 
   return (
     <Palette src={"/image-nightlife.jpg"}>
@@ -135,37 +86,82 @@ export default function Event() {
                   className="mt-8 inline-block transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left align-bottom transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
                   style={{ boxShadow: `0 0 200px ${data.vibrant}80` }}
                 >
-                  {event.prices &&
-                    event.prices.map((price) => (
-                      <div key={price.id} className="mb-4">
-                        <p className="text-sm text-white">
-                          <span className="font-medium">Ticket Type: </span>
-                          {price.name}
-                        </p>
-                        <p className="text-sm text-white">
-                          <span className="font-medium">Price: </span> $
-                          {price.price}
-                        </p>
-                        <button
-                          onClick={() => handleCheckout(price)}
-                          disabled={isSoldOut(price)}
-                          style={{
-                            backgroundColor: isSoldOut(price)
-                              ? "gray"
-                              : fetcher.state === "submitting"
-                              ? data.vibrant
-                              : data.vibrant,
-                          }}
-                          className="mt-2 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white"
-                        >
-                          {isSoldOut(price)
-                            ? "Sold Out"
-                            : fetcher.state === "submitting"
-                            ? "Processing..."
-                            : "Buy Ticket"}
-                        </button>
+                  {allItems.map((price) => (
+                    <div
+                      key={price.id}
+                      className="mb-4 flex w-full flex-row justify-between"
+                    >
+                      <p className="block text-sm text-white">
+                        <span className="font-medium">{price.name}: </span>$
+                        {price.price}
+                      </p>
+                      <div className="flex flex-row justify-between gap-2 text-white">
+                        {price.isAvailable ? (
+                          <>
+                            <button
+                              className="h-8 w-8 rounded-full"
+                              style={{ backgroundColor: data.vibrant }}
+                              onClick={() => cart.remove(price.id)}
+                              disabled={price.quantity === 0}
+                              aria-label="Remove Ticket"
+                            >
+                              -
+                            </button>
+                            <p>{price.quantity}</p>
+                            <button
+                              className="h-8 w-8 rounded-full"
+                              style={{ backgroundColor: data.vibrant }}
+                              onClick={() => cart.add(price.id)}
+                              aria-label="Add Ticket"
+                            >
+                              +
+                            </button>
+                          </>
+                        ) : (
+                          <p>Sold Out</p>
+                        )}
                       </div>
-                    ))}
+                    </div>
+                  ))}
+
+                  {cart.quantity > 0 && (
+                    <div>
+                      <p className="text-lg font-bold text-white">Cart</p>
+                      {cart.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="mb-4 flex flex-row justify-between text-sm text-white"
+                        >
+                          <p className="font-medium">
+                            {item.name}:{" "}
+                            <span className="font-normal text-gray-400">
+                              {item.quantity}
+                            </span>
+                          </p>
+                          <div className="flex flex-col items-end">
+                            <p>${item.price * item.quantity}</p>
+                            {item.quantity > 1 && (
+                              <p className="text-gray-400">
+                                ${item.price} each
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      <p className="text-sm text-white">
+                        <span className="font-medium">Total: </span> $
+                        {cart.total}
+                      </p>
+                      <button
+                        onClick={checkout}
+                        disabled={state === "loading"}
+                        className="rounded p-3 text-white"
+                        style={{ backgroundColor: data.vibrant }}
+                      >
+                        {state === "loading" ? "Loading..." : "Checkout"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -230,6 +226,24 @@ export default function Event() {
                   {event.description}
                 </p>
               </div>
+            </div>
+          </div>
+          <div
+            className={
+              "sticky bottom-0 left-0 right-0 flex flex-row justify-between bg-red-600 p-3 shadow-sm" +
+              (isErrorShown ? "" : " opacity-0")
+            }
+          >
+            <div>
+              <p className="text-white">
+                <span className="font-bold">Error:</span>{" "}
+                {actionData?.message ?? "Sorry, something went wrong."}
+              </p>
+            </div>
+            <div>
+              <button onClick={() => setIsErrorShown(false)}>
+                <XCircleIcon className="h-6 w-6 text-white" title="Close" />
+              </button>
             </div>
           </div>
         </>

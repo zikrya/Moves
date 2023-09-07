@@ -45,9 +45,9 @@ export const action = async ({ params, request }: ActionArgs) => {
         { status: 400 }
       );
     }
-    if (ticket.validatedAt) {
+    if (ticket.usedAt) {
       return json(
-        { valid: false, message: "Ticket already validated" },
+        { valid: false, message: `Ticket already used at ${ticket.usedAt.toDateString()}` },
         { status: 400 }
       );
     }

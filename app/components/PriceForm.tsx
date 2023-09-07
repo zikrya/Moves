@@ -126,7 +126,7 @@ export default function PriceForm({
                         </div>
                         <div className="mb-2">
                           <label
-                            htmlFor="quantity"
+                            htmlFor="limit"
                             className="block text-sm font-medium leading-6 text-indigo-600"
                           >
                             Quantity
@@ -134,8 +134,8 @@ export default function PriceForm({
                           <div className="mt-1">
                             <input
                               type="number"
-                              name="quantity"
-                              id="quantity"
+                              name="limit"
+                              id="limit"
                               className="block w-full rounded-md border-0 py-1.5 text-indigo-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               placeholder="50"
                               required
@@ -145,7 +145,7 @@ export default function PriceForm({
                       </div>
                     </div>
                   </div>
-                  <div className="bg-black bg-black px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <div className="bg-black px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="submit"
                       className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"

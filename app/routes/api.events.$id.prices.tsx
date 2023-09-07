@@ -9,7 +9,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   const formData = await request.formData();
   const name = formData.get("name") as string;
   const price = Number(formData.get("price") as string);
-  const quantity = Number(formData.get("quantity") as string);
+  const limit = Number(formData.get("limit") as string);
 
   const event = await prisma.event.findUniqueOrThrow({
     where: { id: eventId },
@@ -27,7 +27,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     data: {
       name,
       price,
-      quantity,
+      limit,
       event: {
         connect: {
           id: eventId,
