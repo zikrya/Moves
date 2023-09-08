@@ -29,15 +29,16 @@ model Password {
 }
 
 model Event {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  location    String?
-  imageURL    String?
-  startsAt    DateTime
-  endsAt      DateTime
-  refund      String?
-  terms       String?
+  id           String   @id @default(cuid())
+  name         String
+  summary      String
+  description  String
+  location     String
+  imageURL     String
+  startsAt     DateTime
+  endsAt       DateTime
+  refundPolicy String?
+  isPublished  Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -45,14 +46,14 @@ model Event {
 
   user         User          @relation(fields: [userId], references: [id])
   tickets      Ticket[]
-  prices       Price[]
+  ticketTypes  TicketType[]
   transactions Transaction[]
 }
 
-model Price {
+model TicketType {
   id    String @id @default(cuid())
   name  String
-  price Float
+  price Int
   limit Int?
 
   createdAt DateTime @default(now())
@@ -87,11 +88,11 @@ model Ticket {
 
   transaction Transaction @relation(fields: [transactionId], references: [id])
   event       Event       @relation(fields: [eventId], references: [id])
-  price       Price       @relation(fields: [priceId], references: [id])
+  type        TicketType  @relation(fields: [ticketTypeId], references: [id])
   user        User        @relation(fields: [userId], references: [id])
 
   eventId       String
-  priceId       String
+  ticketTypeId  String
   transactionId String
   userId        String
 }

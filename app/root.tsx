@@ -36,7 +36,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function App() {
   const location = useLocation();
-  const showNavBar = location.pathname !== "/";
+  const showNavBar = location.pathname !== "/" && location.pathname !== "/events/create";
 
   return (
     <html lang="en" className="h-full">

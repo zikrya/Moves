@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+.pac-container.pac-logo {
+  @apply text-white font-sans bg-gray-800 rounded;
+}
+
+.pac-item-query {
+  @apply text-white font-sans font-semibold;
+}
+
+.pac-item {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+.pac-item > span {
+  @apply text-gray-300;
+}
+
+.pac-item:hover {
+  @apply bg-gray-600;
+}
+
+.pac-logo:after {
+  content: "Powered by Google";
+  @apply bg-gray-800 text-xs text-gray-300 p-2;
+  background-image: none;
+  background-size: unset;
+  height: unset;
+}
+
 .your-component-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -59,14 +87,17 @@
   width: 800px;
   height: 800px;
 }
+
 .column-layout {
   column-count: 1;
   column-gap: 1rem;
 }
+
 .section {
   break-inside: avoid;
   margin-bottom: 1rem;
 }
+
 .contain {
   width: 3050px;
   height: 500px;

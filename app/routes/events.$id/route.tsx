@@ -1,10 +1,11 @@
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { Palette } from "react-palette";
 import { useTypedActionData, useTypedLoaderData } from "remix-typedjson";
-import { useEnv, useOptionalUser } from "~/utils";
+import { useMapsApiLoader } from "~/maps.client";
+import { useOptionalUser } from "~/utils";
 import { action } from "./action";
 import { loader } from "./loader";
 import { useCart } from "./useCart";
@@ -15,12 +16,9 @@ export default function EventPage() {
   const user = useOptionalUser();
   const { event, coordinates } = useTypedLoaderData<typeof loader>();
   const actionData = useTypedActionData<typeof action>();
-  const { MAPS_API_KEY } = useEnv();
   const { allItems, cart, checkout, state } = useCart();
   const [showMap, setShowMap] = useState(false);
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: MAPS_API_KEY,
-  });
+  const maps = useMapsApiLoader();
   const [isErrorShown, setIsErrorShown] = useState(false);
 
   useEffect(() => {
@@ -178,9 +176,8 @@ export default function EventPage() {
               <div className="your-component-container">
                 <div className="flex items-center lg:order-1">
                   <Link
-                    to={`https://www.google.com/maps/search/?api=1&query=${
-                      event.location ? encodeURIComponent(event.location) : ""
-                    }`}
+                    to={`https://www.google.com/maps/search/?api=1&query=${event.location ? encodeURIComponent(event.location) : ""
+                      }`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mr-4"
@@ -188,7 +185,7 @@ export default function EventPage() {
                   >
                     {event.location}
                   </Link>
-                  {coordinates && isLoaded && (
+                  {coordinates && maps.isLoaded && (
                     <>
                       <button
                         onClick={() => setShowMap((prev) => !prev)}
